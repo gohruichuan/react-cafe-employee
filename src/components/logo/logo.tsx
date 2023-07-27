@@ -1,9 +1,9 @@
-import logo from "../../assets/logo.png"
+import logo from "../../assets/logo.jpg"
 
 import "./logo.scss"
 
 interface LogoProps{
-    className: string
+    className?: string
 }
 
 export default function Logo({className}: LogoProps){

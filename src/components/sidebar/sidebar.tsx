@@ -10,17 +10,19 @@ export default function Sidebar(){
         <>
             <div className="sidebarWrapper">
                 <div className="center">
-                    <Logo className="spacing"/>
-                    <p>Cafe Manager System</p>
+                    <Logo/>
                 </div>
-                <IconButton aria-label="cafes" href="/">
-                    <LocalCafeIcon />
-                    <p>Cafes</p>
-                </IconButton>
-                <IconButton aria-label="employees" href="/employees">
-                    <BadgeIcon />
-                    <p>Employees</p>
-                </IconButton>
+                <div className="spacing">
+                    <IconButton aria-label="cafes" href="/">
+                        <LocalCafeIcon />
+                        <p>Cafes</p>
+                    </IconButton>
+                    <IconButton aria-label="employees" href="/employees">
+                        <BadgeIcon />
+                        <p>Employees</p>
+                    </IconButton>
+                </div>
+
             </div>
         </>
     )

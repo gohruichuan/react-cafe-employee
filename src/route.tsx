@@ -10,4 +10,3 @@ const routes = createBrowserRouter([
 ]);
 
 export default routes
-//  module.exports = {router}

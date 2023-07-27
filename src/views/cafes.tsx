@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
-import { useSelector, useDispatch } from "react-redux"
-import cafeActions from "../redux/cafes/cafeActions"
+import { useAppDispatch, useAppSelector } from "../redux/store"
+import cafeApis from "../apis/cafes"
+import { setCafes } from "../redux/features/cafeSlice"
 
 interface Cafe {
     "id": string,
@@ -11,36 +12,23 @@ interface Cafe {
     "createdAt": string,
     "updatedAt": string
 }
-
-interface State {
-    cafes: Cafe[]
-}
-
 export default function Cafes(){
-    console.log("ENTERED COMP")
-    const [cafesData, setCafesData]: any[] = useState([])
+    const dispatch = useAppDispatch();
+    const cafesStoreData = useAppSelector( state => state.cafes)
 
-    const dispatch = useDispatch();
-    const cafesStoreData = useSelector( (state: State) => state.cafes)
+    const getCafeData = async () =>{
+        const cafesData = await cafeApis.getCafes()
+        dispatch(setCafes(cafesData))
+    }
     useEffect(()=>{
-        console.log("dispatch");
-        
-        dispatch(cafeActions.getCafes())
+        getCafeData()
     }, [])
-
-    // useEffect(()=>{
-
-    //     console.log("state change");
-        
-    //     setCafesData(cafesStoreData)
-    //     console.log("cafesData ", cafesData);
-    // }, [cafesStoreData])
 
     return (
         <>
             <div>
                 {
-                    cafesData.map((cafe: Cafe) =>{
+                    cafesStoreData.cafes.map((cafe: Cafe) =>{
                         return <p> {cafe.name} </p>
                     })
                 }

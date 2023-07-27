@@ -1,6 +1,12 @@
-import { applyMiddleware, createStore } from 'redux'
-import cafeReducer from './cafes/cafeReducers'
+import { configureStore } from '@reduxjs/toolkit'
+import CafeSlice from './features/cafeSlice'
+import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
-const store = createStore(cafeReducer)
+export const store = configureStore({
+    reducer: {
+        cafes: CafeSlice
+    }
+})
 
-export default store;
+export const useAppDispatch:()=> typeof store.dispatch=useDispatch;
+export const useAppSelector:TypedUseSelectorHook<ReturnType<typeof store.getState>>=useSelector

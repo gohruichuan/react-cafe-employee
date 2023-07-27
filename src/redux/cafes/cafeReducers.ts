@@ -26,11 +26,13 @@ const initialState: State = {
     cafes: [],
 }
 
-const cafesReducer = async (state = initialState, actions: any): Promise<State> =>{
+const cafesReducer =  (state = initialState, actions: any) =>{
     switch(actions.type){
         case "GET_CAFES": {
-            const cafes = await cafesApi.getCafes();
-            console.log("cafes ", cafes)
+            fetch("http://127.0.0.1:8080/cafes?location=",{ method:"GET" }).then( async res =>{
+                state.cafes = await res.json()
+                console.log("state.cafes ", state.cafes)
+            })
 
             return { ...state};
         }

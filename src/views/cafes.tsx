@@ -1,4 +1,4 @@
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { useSelector, useDispatch } from "react-redux"
 import cafeActions from "../redux/cafes/cafeActions"
 
@@ -17,17 +17,35 @@ interface State {
 }
 
 export default function Cafes(){
-    const dispatch = useDispatch();
-    const cafes = useSelector( (state: State) => state.cafes)
-    useEffect(()=>{
-        dispatch(cafeActions.getCafes())
+    console.log("ENTERED COMP")
+    const [cafesData, setCafesData]: any[] = useState([])
 
-        console.log("cafes ", cafes)
-    })
+    const dispatch = useDispatch();
+    const cafesStoreData = useSelector( (state: State) => state.cafes)
+    useEffect(()=>{
+        console.log("dispatch");
+        
+        dispatch(cafeActions.getCafes())
+    }, [])
+
+    // useEffect(()=>{
+
+    //     console.log("state change");
+        
+    //     setCafesData(cafesStoreData)
+    //     console.log("cafesData ", cafesData);
+    // }, [cafesStoreData])
 
     return (
         <>
-            <div>Hello world!</div>
+            <div>
+                {
+                    cafesData.map((cafe: Cafe) =>{
+                        return <p> {cafe.name} </p>
+                    })
+                }
+
+            </div>
         </>
     )
 }

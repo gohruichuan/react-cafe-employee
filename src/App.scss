@@ -2,7 +2,13 @@ $sidebarBg: #b1b1b1;
 
 .App {
     display: flex;
+
     .MuiSvgIcon-root{
         font-size: 30px !important;
+    }
+
+    .AppWrapper{
+        min-width: 1200px;
+        margin: 0 auto;
     }
 }

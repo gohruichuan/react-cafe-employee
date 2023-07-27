@@ -1,11 +1,12 @@
+import Cafes from "./views/cafes"
 import {
     createBrowserRouter,
-  } from "react-router-dom";
+} from "react-router-dom";
 
 const routes = createBrowserRouter([
     {
         path: "/",
-        element: <div>Hello world!</div>,
+        element: <Cafes/>,
     }
 ]);
 

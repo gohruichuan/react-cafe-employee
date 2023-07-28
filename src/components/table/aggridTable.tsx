@@ -74,12 +74,9 @@ export default function AggridTable({type, rowData}: any){
     }, []);
 
     const onFilterTextBoxChanged = useCallback(() => {
-        const filterEle= document.getElementById('filter-text-box')
-        if(filterEle){
-            gridRef.current.api.setQuickFilter(
+        gridRef.current.api.setQuickFilter(
             filterText.current.value
-            );
-        }
+        );
     }, []);
 
 
@@ -89,8 +86,7 @@ export default function AggridTable({type, rowData}: any){
             <input
                 ref={filterText}
                 type="text"
-                id="filter-text-box"
-                placeholder="Filter..."
+                placeholder="Hougang, Pasir Ris, Orchard, Sengkang"
                 onInput={onFilterTextBoxChanged}
             />
         </>

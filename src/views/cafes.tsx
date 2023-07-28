@@ -21,11 +21,18 @@ export default function Cafes(){
     const cafesStoreData = useAppSelector( state => state.cafes)
 
     const gridRef: any = useRef();
+    const filterText:any = useRef();
+
     const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
     const [rowData, setRowData]: any = useState([]);
 
     const BtnCellRenderer = () =>{
-      return (<button onClick={onBtStartEditing}>Edit</button>)
+      return (
+        <>
+          <button onClick={onBtStartEditing}>Edit</button>
+          <button onClick={onBtStartEditing}>Delete</button>
+        </>
+      )
     }
 
     const [columnDefs, setColumnDefs]: any = useState([
@@ -95,9 +102,28 @@ export default function Cafes(){
       }
   }, [cafesStoreData.cafes.length])
 
+  const onFilterTextBoxChanged = useCallback(() => {
+    const filterEle= document.getElementById('filter-text-box')
+    if(filterEle){
+      gridRef.current.api.setQuickFilter(
+        filterText.current.value
+      );
+    }
+
+  }, []);
+
     return (
         <>
-          <h1>Cafes</h1>
+          <h1>List of Cafes</h1>
+          <span>Filter Location: </span>
+          <input
+            ref={filterText}
+            type="text"
+            id="filter-text-box"
+            placeholder="Filter..."
+            onInput={onFilterTextBoxChanged}
+          />
+          <button onClick={ () => {return}}> Add New Café </button>
           <div style={gridStyle} className="ag-theme-alpine">
             <AgGridReact
               ref={gridRef}

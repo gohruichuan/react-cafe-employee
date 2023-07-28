@@ -1,9 +1,8 @@
 import { useEffect, useCallback, useMemo, useRef, useState } from "react"
-import { AgGridReact } from 'ag-grid-react';
-import 'ag-grid-community/styles/ag-grid.css';
-import 'ag-grid-community/styles/ag-theme-alpine.css';
-
 import { useAppDispatch, useAppSelector } from "../redux/store"
+
+import AggridTable from "../components/table/aggridTable"
+
 import cafeApis from "../apis/cafes"
 import { setCafes } from "../redux/features/cafeSlice"
 
@@ -20,70 +19,8 @@ export default function Cafes(){
     const dispatch = useAppDispatch();
     const cafesStoreData = useAppSelector( state => state.cafes)
 
-    const gridRef: any = useRef();
-    const filterText:any = useRef();
 
-    const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
     const [rowData, setRowData]: any = useState([]);
-
-    const BtnCellRenderer = () =>{
-      return (
-        <>
-          <button onClick={onBtStartEditing}>Edit</button>
-          <button onClick={onBtStartEditing}>Delete</button>
-        </>
-      )
-    }
-
-    const [columnDefs, setColumnDefs]: any = useState([
-      { field: 'logo', headerName:"Logo" },
-      { field: 'name', headerName:"Name"  },
-      { field: 'description', headerName:"Description" },
-      { field: 'employees', headerName:"Employees" },
-      { field: 'location', headerName:"Location" },
-      { field: 'actions', headerName: "Actions", minWidth: 175,
-      cellRenderer: BtnCellRenderer, editable: false }
-    ]);
-
-    const defaultColDef: any  = useMemo(() => {
-        return {
-          flex: 1,
-          editable: true,
-          cellDataType: false,
-        };
-      }, []);
-    
-    const onCellValueChanged: any  = useCallback((event: any): any => {
-      console.log("onCellValueChanged");
-      
-      console.log(
-        'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
-      );
-    }, []);
-  
-    const onRowValueChanged: any  = useCallback((event: any): any => {
-      console.log("onRowValueChanged ", event);
-
-      const data = event.data;
-      console.log(
-        'onRowValueChanged: (' +
-          data.name +
-          ')'
-      );
-    }, []);
-
-      
-    const onBtStopEditing: any  = useCallback(() => {
-        gridRef.current.api.stopEditing();
-    }, []);
-
-    const onBtStartEditing: any  = useCallback(() => {
-        const selectedRowIndex = parseInt(gridRef.current.api.getSelectedNodes()[0].id)
-        gridRef.current.api.startEditingCell({
-        rowIndex: selectedRowIndex,
-        colKey: 'name',
-        });
-    }, []);
 
     const getCafeData = async () =>{
         const cafesData = await cafeApis.getCafes()
@@ -93,49 +30,20 @@ export default function Cafes(){
         getCafeData()
     }, [])
 
-
-
     useEffect(()=>{
       if(cafesStoreData.cafes.length){
         const cafesData = JSON.parse(JSON.stringify(cafesStoreData.cafes))
         setRowData(cafesData)
       }
-  }, [cafesStoreData.cafes.length])
-
-  const onFilterTextBoxChanged = useCallback(() => {
-    const filterEle= document.getElementById('filter-text-box')
-    if(filterEle){
-      gridRef.current.api.setQuickFilter(
-        filterText.current.value
-      );
-    }
-
-  }, []);
+    }, [cafesStoreData.cafes.length])
 
     return (
         <>
           <h1>List of Cafes</h1>
-          <span>Filter Location: </span>
-          <input
-            ref={filterText}
-            type="text"
-            id="filter-text-box"
-            placeholder="Filter..."
-            onInput={onFilterTextBoxChanged}
-          />
-          <button onClick={ () => {return}}> Add New Café </button>
-          <div style={gridStyle} className="ag-theme-alpine">
-            <AgGridReact
-              ref={gridRef}
+            <AggridTable
+              type="cafes"
               rowData={rowData}
-              columnDefs={columnDefs}
-              defaultColDef={defaultColDef}
-              editType={'fullRow'}
-              rowSelection={'single'}
-              onCellValueChanged={onCellValueChanged}
-              onRowValueChanged={onRowValueChanged}
             />
-          </div>
         </>
     )
 }

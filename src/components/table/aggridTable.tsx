@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef, useState } from "react"
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
+import './table.scss'
 
 export default function AggridTable({type, rowData}: any){
 
@@ -14,7 +15,7 @@ export default function AggridTable({type, rowData}: any){
       return (
         <>
           <button onClick={onBtStartEditing}>Edit</button>
-          <button style={{marginLeft: "20px"}} onClick={onBtStartEditing}>Delete</button>
+          <button className="cellBtn" onClick={onBtStartEditing}>Delete</button>
         </>
       )
     }
@@ -92,12 +93,17 @@ export default function AggridTable({type, rowData}: any){
         </>
     )
     
+    const formatType = () => {
+      return type === "cafes"? "Cafe": "Employee"
+    }
     return (
         <>
-            {
-                (type === "cafes")? filterDOM: null
-            }
-            <button onClick={ () => {return}}> Add New Café </button>
+            <div className="headerInputs">
+              {
+                  (type === "cafes")? filterDOM: null
+              }
+              <button className="addBtn" onClick={ () => {return}}> Add New {formatType()} </button>
+            </div>
             <div style={gridStyle} className="ag-theme-alpine">
                 <AgGridReact
                     ref={gridRef}

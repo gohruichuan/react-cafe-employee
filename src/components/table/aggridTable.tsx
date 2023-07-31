@@ -9,7 +9,7 @@ import MenuItem from '@mui/material/MenuItem';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
 
-export default function AggridTable({type, rowData, filterData}: any){
+export default function AggridTable({type, rowData, filterData, getCafeData}: any){
 
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
 
@@ -87,11 +87,11 @@ export default function AggridTable({type, rowData, filterData}: any){
       );
   }, []);
 
-  const handleChange = (event: SelectChangeEvent) => {
-    setSelectedLocation(event.target.value);
+  const handleChange = async (event: SelectChangeEvent) => {
+    const location = event.target.value === "All Locations"? "": event.target.value;
 
-    console.warn("event.target.value ", event.target.value);
-    
+    setSelectedLocation(event.target.value);
+    getCafeData(location)
   };
 
   const filterDOM = (

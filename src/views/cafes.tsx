@@ -13,17 +13,15 @@ export default function Cafes(){
     const [rowData, setRowData]: any = useState([]);
     const [filterData, setFilterData]: any = useState([]);
 
-    const getCafeData = async () =>{
-        const cafesData = await cafeApis.getCafes()
+    const getCafeData = async (location?: string) =>{
+        const cafesData = await cafeApis.getCafes(location)
         dispatch(setCafes(cafesData))
 
         if(!filterData.length){
           const locationsData = cafesData.reduce((accumulator: any, cafe: any) => {
-
             if (accumulator.indexOf(cafe.location) === -1) {
               accumulator.push(cafe.location);
             }
-
             return accumulator;
           }, []);
           setFilterData(locationsData)
@@ -47,6 +45,7 @@ export default function Cafes(){
               type="cafes"
               rowData={rowData}
               filterData={filterData}
+              getCafeData={getCafeData}
             />
         </>
     )

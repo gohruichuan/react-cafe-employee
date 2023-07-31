@@ -21,8 +21,8 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   const BtnCellRenderer = () =>{
     return (
       <>
-        <Button variant="contained" className="actionsBtn" onClick={onBtStartEditing}>Edit</Button>
-        <Button variant="contained" className="cellBtn actionsBtn" onClick={onBtStartEditing}>Delete</Button>
+        <Button variant="contained" className="actionsBtn" onClick={editRow}>Edit</Button>
+        <Button variant="contained" className="cellBtn actionsBtn" onClick={deleteRow}>Delete</Button>
       </>
     )
   }
@@ -68,24 +68,24 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     );
   }, []);
 
-    
-  const onBtStopEditing: any  = useCallback(() => {
-      gridRef.current.api.stopEditing();
-  }, []);
+  const editRow = () => {
+    window.location.href = "/cafe/add"
+  }
 
-  const onBtStartEditing: any  = useCallback(() => {
-      const selectedRowIndex = parseInt(gridRef.current.api.getSelectedNodes()[0].id)
-      gridRef.current.api.startEditingCell({
-      rowIndex: selectedRowIndex,
-      colKey: 'name',
-      });
-  }, []);
+  const deleteRow = () => {
 
-  const onFilterTextBoxChanged = useCallback(() => {
-      gridRef.current.api.setQuickFilter(
-          filterText.current.value
-      );
-  }, []);
+  }
+  // const onBtStopEditing: any  = useCallback(() => {
+  //     gridRef.current.api.stopEditing();
+  // }, []);
+
+  // const onBtStartEditing: any  = useCallback(() => {
+  //     const selectedRowIndex = parseInt(gridRef.current.api.getSelectedNodes()[0].id)
+  //     gridRef.current.api.startEditingCell({
+  //     rowIndex: selectedRowIndex,
+  //     colKey: 'name',
+  //     });
+  // }, []);
 
   const handleChange = async (event: SelectChangeEvent) => {
     const location = event.target.value === "All Locations"? "": event.target.value;
@@ -135,7 +135,6 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
                   rowData={rowData}
                   columnDefs={columnDefs[type]}
                   defaultColDef={defaultColDef}
-                  editType={'fullRow'}
                   rowSelection={'single'}
                   onCellValueChanged={onCellValueChanged}
                   onRowValueChanged={onRowValueChanged}

@@ -6,15 +6,6 @@ import AggridTable from "../components/table/aggridTable"
 import cafeApis from "../apis/cafes"
 import { setCafes } from "../redux/features/cafeSlice"
 
-interface Cafe {
-    "id": string,
-    "name": string,
-    "description": string,
-    "logo": string,
-    "location": string,
-    "createdAt": string,
-    "updatedAt": string
-}
 export default function Cafes(){
     const dispatch = useAppDispatch();
     const cafesStoreData = useAppSelector( state => state.cafes)

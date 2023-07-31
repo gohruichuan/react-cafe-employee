@@ -4,6 +4,7 @@ import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
 import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import Button from '@mui/material/Button';
 
 import cafeApis from "../../apis/cafes"
 
@@ -40,7 +41,7 @@ export default function AddCafe(){
             if(ele && ele.value) ele.value = ""
         })
     }
-    
+
     const handleSubmit = async (e: { preventDefault: () => void; target: any; }) => {
         // Prevent the browser from reloading the page
         e.preventDefault();
@@ -105,7 +106,7 @@ export default function AddCafe(){
                             }
                         })
                     }
-                    <button type="submit">Submit form</button>
+                    <Button type="submit" variant='contained'>Submit form</Button>
                 </form>
                 <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
                     <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>

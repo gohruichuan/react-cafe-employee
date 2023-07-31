@@ -10,12 +10,24 @@ export default function Cafes(){
     const dispatch = useAppDispatch();
     const cafesStoreData = useAppSelector( state => state.cafes)
 
-
     const [rowData, setRowData]: any = useState([]);
+    const [filterData, setFilterData]: any = useState([]);
 
     const getCafeData = async () =>{
         const cafesData = await cafeApis.getCafes()
         dispatch(setCafes(cafesData))
+
+        if(!filterData.length){
+          const locationsData = cafesData.reduce((accumulator: any, cafe: any) => {
+
+            if (accumulator.indexOf(cafe.location) === -1) {
+              accumulator.push(cafe.location);
+            }
+
+            return accumulator;
+          }, []);
+          setFilterData(locationsData)
+        }
     }
     useEffect(()=>{
         getCafeData()
@@ -34,6 +46,7 @@ export default function Cafes(){
             <AggridTable
               type="cafes"
               rowData={rowData}
+              filterData={filterData}
             />
         </>
     )

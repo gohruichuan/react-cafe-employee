@@ -1,11 +1,21 @@
 .addBtn{
-    float: right;
-}
-
-.cellBtn{
-    margin-left: 20px;
+    background: rgb(128, 128, 255) !important;
 }
 
 .headerInputs{
     margin-bottom: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.actionsBtn{
+    background: rgb(128, 128, 255) !important;
+    padding: 1px 5px !important;
+    margin-left: 5px !important;
+}
+
+.ag-cell {
+    align-items: center;
+    display: flex;
 }

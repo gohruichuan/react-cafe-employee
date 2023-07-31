@@ -10,6 +10,7 @@ import Select, { SelectChangeEvent } from '@mui/material/Select';
 import Button from '@mui/material/Button';
 
 export default function AggridTable({type, rowData, filterData, getCafeData}: any){
+  const pageURL = type === "cafes"? "cafe": "employee"
 
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
 
@@ -68,12 +69,15 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     );
   }, []);
 
+  const addRow = () => {
+    window.location.href = `/${pageURL}/add`
+  }
+
   const editRow = () => {
-    window.location.href = "/cafe/add"
+    window.location.href = `/${pageURL}/edit`
   }
 
   const deleteRow = () => {
-
   }
   // const onBtStopEditing: any  = useCallback(() => {
   //     gridRef.current.api.stopEditing();
@@ -127,7 +131,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
             {
                 (type === "cafes")? filterDOM: null
             }
-            <Button variant="contained" className="addBtn" onClick={ () => {return}}> Add New {formatType()} </Button>
+            <Button variant="contained" className="addBtn" onClick={addRow}> Add New {formatType()} </Button>
           </div>
           <div style={gridStyle} className="ag-theme-alpine">
               <AgGridReact

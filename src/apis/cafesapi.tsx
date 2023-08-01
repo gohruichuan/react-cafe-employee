@@ -4,35 +4,58 @@ const headers = {
     'Content-Type': 'application/json'
 };
 
-const getCafes = ( params = "" ) => {
-    return fetch(`${url}?location=`+params,{ method:"GET" }).then( async res =>{
-        return await res.json();
-    }).catch(err => {throw err})
+const getCafes = async ( params = "" ) => {
+    try {
+        const res = await fetch(`${url}?location=` + params, { method: "GET" });
+        return await await res.json();
+    } catch (err) {
+        throw err;
+    }
 }
 
-const addCafe = ( params = {} ) => {
-    return fetch(`${url}`,{
-            method:"POST",
+const addCafe = async ( params = {} ) => {
+    try {
+        const res = await fetch(`${url}`, {
+            method: "POST",
             headers: headers,
             body: JSON.stringify(params)
-        }).then( async res =>{
-            return await res.json();
-        }).catch(err => {throw err})
+        });
+        return await await res.json();
+    } catch (err) {
+        throw err;
+    }
 }
 
-const deleteCafe = ( params = {}) => {
-    return fetch(`${url}`,{
-        method:"DELETE",
-        headers: headers,
-        body: JSON.stringify({id: params})
-    }).then( async res =>{
-        return await res.json();
-    }).catch(err => {throw err})
+const editCafe = async ( params = {} ) => {
+    try {
+        const res = await fetch(`${url}`, {
+            method: "PUT",
+            headers: headers,
+            body: JSON.stringify(params)
+        });
+        return await await res.json();
+    } catch (err) {
+        throw err;
+    }
+}
+
+const deleteCafe = async ( params = {}) => {
+    try {
+        const res = await fetch(`${url}`, {
+            method: "DELETE",
+            headers: headers,
+            body: JSON.stringify({ id: params })
+        });
+        return await await res.json();
+    } catch (err) {
+        throw err;
+    }
 }
 
 const functions = {
     "getCafes": getCafes,
     "addCafe": addCafe,
+    "editCafe": editCafe,
     "deleteCafe": deleteCafe
 }
 export default functions;

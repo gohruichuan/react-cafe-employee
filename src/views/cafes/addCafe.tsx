@@ -31,13 +31,14 @@ export default function AddCafe(){
 
     const fields = ["name", "description", "location"];
 
+    const [editData, setEditData]: any = useState();
+
     useEffect(() => {
         if(id){
             setAction("Edit")
             if(cafesStoreData.cafes.length){
                 const rowData = cafesStoreData.cafes.find((cafe: Cafe) => cafe.id === id )
-                console.warn("rowData ", rowData);
-                
+                setEditData(rowData)
                 fields.map((field:string) => {
                     const ele: any = document.getElementById(field)
                     if(ele && !ele.value) ele.value = rowData[field]
@@ -70,16 +71,36 @@ export default function AddCafe(){
         const form = e.target;
         const formData = new FormData(form);
         let formJson = Object.fromEntries(formData.entries());
-        await cafeApis.addCafe(formJson).then( () => {
-            setMsg("Successfully add cafe")
-            setType("success")
-            setOpen(true);
-            clearInputs();
-        }).catch(err => {
-            setMsg("Failed to add cafe: "+ err)
-            setType("error")
-            setOpen(true);
-        })
+
+        if(action === 'Add'){
+            await cafeApis.addCafe(formJson).then( () => {
+                setMsg("Successfully added cafe")
+                setType("success")
+                setOpen(true);
+                clearInputs();
+            }).catch(err => {
+                setMsg("Failed to add cafe: "+ err)
+                setType("error")
+                setOpen(true);
+            })
+        } else {
+            const newData = Object.assign(JSON.parse(JSON.stringify(editData)), formJson)
+
+            delete newData.createdAt;
+            delete newData.updatedAt;
+            delete newData.employees;
+
+            await cafeApis.editCafe(newData).then( () => {
+                setMsg("Successfully edited cafe")
+                setType("success")
+                setOpen(true);
+            }).catch(err => {
+                setMsg("Failed to edit cafe: "+ err)
+                setType("error")
+                setOpen(true);
+            })
+        }
+
 
     }
 

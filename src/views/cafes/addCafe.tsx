@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom';
-import { useAppSelector } from "../../redux/store"
+import { useNavigate, useParams } from 'react-router-dom';
+import { useAppDispatch, useAppSelector } from "../../redux/store"
+import { setCafes } from "../../redux/features/cafeSlice"
 
 import SnackbarComp from '../../components/snackbar/snackbar';
 
@@ -19,6 +20,8 @@ interface Cafe{
 }
 
 export default function AddCafe(){
+    const navigate = useNavigate();
+    const dispatch = useAppDispatch();
 
     const { id } = useParams()
     const [action, setAction] = useState("Add");
@@ -33,19 +36,32 @@ export default function AddCafe(){
 
     const [editData, setEditData]: any = useState();
 
+    const getCafeData = async (location?: string) =>{
+        const cafesData = await cafeApis.getCafes(location)
+        dispatch(setCafes(cafesData))
+    }
+
+    const fillInputValues = () => {
+        if(cafesStoreData.cafes.length){
+            const rowData = cafesStoreData.cafes.find((cafe: Cafe) => cafe.id === id )
+            setEditData(rowData)
+            fields.map((field:string) => {
+                const ele: any = document.getElementById(field)
+                if(ele && !ele.value) ele.value = rowData[field]
+            })
+        }
+          else {
+            getCafeData()
+        }
+    }
+    useEffect(()=>{
+        fillInputValues()
+    }, [cafesStoreData.cafes.length])
+
     useEffect(() => {
         if(id){
             setAction("Edit")
-            if(cafesStoreData.cafes.length){
-                const rowData = cafesStoreData.cafes.find((cafe: Cafe) => cafe.id === id )
-                setEditData(rowData)
-                fields.map((field:string) => {
-                    const ele: any = document.getElementById(field)
-                    if(ele && !ele.value) ele.value = rowData[field]
-                })
-            } else {
-                // TODO: get cafe data
-            }
+            fillInputValues()
         }
     }, [])
 
@@ -151,6 +167,7 @@ export default function AddCafe(){
                         })
                     }
                     <Button type="submit" variant='contained'>Submit form</Button>
+                    <Button variant='contained' style={{marginLeft: "20px"}} onClick={()=> navigate("/")}>Cancel</Button>
                 </form>
                 <SnackbarComp
                     type={type}

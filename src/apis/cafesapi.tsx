@@ -7,7 +7,7 @@ const headers = {
 const getCafes = async ( params = "" ) => {
     try {
         const res = await fetch(`${url}?location=` + params, { method: "GET" });
-        return await await res.json();
+        return await res.json();
     } catch (err) {
         throw err;
     }

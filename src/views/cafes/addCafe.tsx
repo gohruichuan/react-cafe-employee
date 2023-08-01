@@ -55,7 +55,9 @@ export default function AddCafe(){
         }
     }
     useEffect(()=>{
-        fillInputValues()
+        if(id){
+            fillInputValues()
+        }
     }, [cafesStoreData.cafes.length])
 
     useEffect(() => {
@@ -167,7 +169,7 @@ export default function AddCafe(){
                         })
                     }
                     <Button type="submit" variant='contained'>Submit form</Button>
-                    <Button variant='contained' style={{marginLeft: "20px"}} onClick={()=> window.location.href = "/"}>Cancel</Button>
+                    <Button variant='contained' style={{marginLeft: "20px"}} onClick={()=> navigate("/")}>Cancel</Button>
                 </form>
                 <SnackbarComp
                     type={type}

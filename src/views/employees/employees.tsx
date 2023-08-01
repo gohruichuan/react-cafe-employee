@@ -7,9 +7,12 @@ import cafeApis from "../../apis/cafesapi"
 
 import { setCafes } from "../../redux/features/cafeSlice"
 import { setEmployees } from "../../redux/features/employeeSlice"
+import { useParams } from "react-router-dom"
 
 export default function Employees(){
     const dispatch = useAppDispatch();
+    const { cafeid } = useParams()
+
     const employeesStoreData = useAppSelector( state => state.employees)
     const cafeStoreData = useAppSelector( state => state.cafes)
 
@@ -17,8 +20,8 @@ export default function Employees(){
     const [filterData, setFilterData]: any = useState([]);
 
     const getEmployeesData = async (cafeName?: string) =>{
-        const employeesData = await employeesApis.getEmployees(cafeName)
-        dispatch(setEmployees(employeesData))
+      const employeesData = await employeesApis.getEmployees(cafeName)
+      dispatch(setEmployees(employeesData))
     }
 
     // const getCafeData = async () =>{
@@ -29,7 +32,7 @@ export default function Employees(){
     // }
 
     useEffect(()=>{
-        getEmployeesData()
+        getEmployeesData(cafeid)
         // getCafeData()
     }, [])
 

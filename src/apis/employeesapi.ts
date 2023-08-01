@@ -9,7 +9,7 @@ const getEmployees = async (params = "") => {
         let apiURL;
 
         if(params)
-            apiURL = baseURL+"?cafe"+params
+            apiURL = baseURL+"?cafeId="+params
         else 
             apiURL = baseURL
 

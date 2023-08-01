@@ -19,6 +19,10 @@ const routes = [
         path: "/employees",
         element: <Employees/>,
     },
+    {
+        path: "/employees/:cafeid",
+        element: <Employees/>,
+    },
 ]
 
 export default routes

@@ -3,41 +3,60 @@ import { useAppDispatch, useAppSelector } from "../../redux/store"
 
 import AggridTable from "../../components/table/aggridTable"
 import employeesApis from "../../apis/employeesapi"
+import cafeApis from "../../apis/cafesapi"
 
+import { setCafes } from "../../redux/features/cafeSlice"
 import { setEmployees } from "../../redux/features/employeeSlice"
 
 export default function Employees(){
     const dispatch = useAppDispatch();
     const employeesStoreData = useAppSelector( state => state.employees)
+    const cafeStoreData = useAppSelector( state => state.cafes)
 
     const [rowData, setRowData]: any = useState([]);
+    const [cafesData, setCafesData]: any = useState([]);
     const [filterData, setFilterData]: any = useState([]);
 
     const getEmployeesData = async (cafeName?: string) =>{
-
-
         const employeesData = await employeesApis.getEmployees(cafeName)
         dispatch(setEmployees(employeesData))
     }
+
+    const getCafeData = async () =>{
+      if(!cafeStoreData.cafes.length){
+        const cafesDataRes = await cafeApis.getCafes()
+        setCafesData(cafesDataRes)
+        dispatch(setCafes(cafesDataRes))
+      }
+    }
+
     useEffect(()=>{
         getEmployeesData()
+        getCafeData()
     }, [])
 
     useEffect(()=>{
       if(employeesStoreData.employees.length){
-        const cafesData = JSON.parse(JSON.stringify(employeesStoreData.employees))
-        setRowData(cafesData)
+        const employeesData = JSON.parse(JSON.stringify(employeesStoreData.employees))
+        setRowData(employeesData)
       }
     }, [employeesStoreData.employees.length])
 
     return (
         <>
-          <h1>List of Cafes</h1>
-            <AggridTable
-              type="employees"
-              rowData={rowData}
-              filterData={filterData}
-            />
+          <h1>List of Employees</h1>
+            {
+              rowData.length &&
+              cafesData.length && (
+                <AggridTable
+                  type="employees"
+                  rowData={rowData}
+                  filterData={filterData}
+                  cafesData={cafesData}
+                />
+              )
+            }
+
         </>
     )
 }

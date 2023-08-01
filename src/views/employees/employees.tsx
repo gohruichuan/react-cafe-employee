@@ -14,7 +14,6 @@ export default function Employees(){
     const cafeStoreData = useAppSelector( state => state.cafes)
 
     const [rowData, setRowData]: any = useState([]);
-    const [cafesData, setCafesData]: any = useState([]);
     const [filterData, setFilterData]: any = useState([]);
 
     const getEmployeesData = async (cafeName?: string) =>{
@@ -22,17 +21,16 @@ export default function Employees(){
         dispatch(setEmployees(employeesData))
     }
 
-    const getCafeData = async () =>{
-      if(!cafeStoreData.cafes.length){
-        const cafesDataRes = await cafeApis.getCafes()
-        setCafesData(cafesDataRes)
-        dispatch(setCafes(cafesDataRes))
-      }
-    }
+    // const getCafeData = async () =>{
+    //   if(!cafeStoreData.cafes.length){
+    //     const cafesDataRes = await cafeApis.getCafes()
+    //     dispatch(setCafes(cafesDataRes))
+    //   }
+    // }
 
     useEffect(()=>{
         getEmployeesData()
-        getCafeData()
+        // getCafeData()
     }, [])
 
     useEffect(()=>{
@@ -46,17 +44,14 @@ export default function Employees(){
         <>
           <h1>List of Employees</h1>
             {
-              rowData.length &&
-              cafesData.length && (
+              rowData.length && (
                 <AggridTable
                   type="employees"
                   rowData={rowData}
                   filterData={filterData}
-                  cafesData={cafesData}
                 />
               )
             }
-
         </>
     )
 }

@@ -18,7 +18,7 @@ import LaunchIcon from '@mui/icons-material/Launch';
 
 import { CellClickedEvent } from "ag-grid-community";
 
-export default function AggridTable({type, rowData, filterData, getCafeData, cafesData}: any){
+export default function AggridTable({type, rowData, filterData, getCafeData}: any){
   const cafeStoreData = useAppSelector( state => state.cafes)
 
   const pageURL = type === "cafes"? "cafe": "employee"

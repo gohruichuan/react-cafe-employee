@@ -167,7 +167,7 @@ export default function AddCafe(){
                         })
                     }
                     <Button type="submit" variant='contained'>Submit form</Button>
-                    <Button variant='contained' style={{marginLeft: "20px"}} onClick={()=> navigate("/")}>Cancel</Button>
+                    <Button variant='contained' style={{marginLeft: "20px"}} onClick={()=> window.location.href = "/"}>Cancel</Button>
                 </form>
                 <SnackbarComp
                     type={type}

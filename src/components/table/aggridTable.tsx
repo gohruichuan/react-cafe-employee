@@ -1,4 +1,6 @@
 import { useMemo, useRef, useState } from "react"
+import { useNavigate } from "react-router-dom";
+
 import SnackbarComp from '../../components/snackbar/snackbar';
 
 import cafeApis from "../../apis/cafesapi"
@@ -18,7 +20,8 @@ import { CellClickedEvent } from "ag-grid-community";
 
 export default function AggridTable({type, rowData, filterData, getCafeData}: any){
   const pageURL = type === "cafes"? "cafe": "employee"
-
+  const navigate = useNavigate();
+  
   const dispatch = useAppDispatch();
 
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
@@ -42,7 +45,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
   const onClickEmployeeCell = (event: CellClickedEvent) => {
     if(event?.data?.id)
-      window.location.href = "/employees/"+event.data.id
+      navigate("/employees/"+event.data.id);
   }
 
   const employeeCellRenderer = (params: any) => {
@@ -77,14 +80,14 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     }, []);
   
   const addRow = () => {
-    window.location.href = `/${pageURL}/add`
+    navigate(`/${pageURL}/add`);
   }
 
   const editRow = () => {
     const selectedRows = gridRef.current.api.getSelectedRows();
 
     if(selectedRows.length){
-      window.location.href = `/${pageURL}/edit/${selectedRows[0].id}`
+      navigate(`/${pageURL}/edit/${selectedRows[0].id}`);
     }
   }
 

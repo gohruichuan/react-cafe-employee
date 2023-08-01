@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom';
+import { useAppSelector } from "../../redux/store"
 
 import SnackbarComp from '../../components/snackbar/snackbar';
 
@@ -9,24 +10,44 @@ import Button from '@mui/material/Button';
 
 import cafeApis from "../../apis/cafesapi"
 
+interface Cafe{
+    id: string,
+    name: string,
+    description: string,
+    logo?: string,
+    location: string,
+}
+
 export default function AddCafe(){
 
     const { id } = useParams()
-
     const [action, setAction] = useState("Add");
+
+    const cafesStoreData = useAppSelector( state => state.cafes)
 
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState("");
     const [type, setType]: any = useState();
 
-    const fields = ["name", "description","location"];
+    const fields = ["name", "description", "location"];
 
     useEffect(() => {
-        console.log("received id ", id)
-        if(id) setAction("Edit")
-        
+        if(id){
+            setAction("Edit")
+            if(cafesStoreData.cafes.length){
+                const rowData = cafesStoreData.cafes.find((cafe: Cafe) => cafe.id === id )
+                console.warn("rowData ", rowData);
+                
+                fields.map((field:string) => {
+                    const ele: any = document.getElementById(field)
+                    if(ele && !ele.value) ele.value = rowData[field]
+                })
+            } else {
+                // TODO: get cafe data
+            }
+        }
     }, [])
-    
+
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
         return;

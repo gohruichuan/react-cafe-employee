@@ -17,6 +17,10 @@ const routes = createBrowserRouter([
         element: <AddCafe/>,
     },
     {
+        path: "/cafe/edit/:id",
+        element: <AddCafe/>,
+    },
+    {
         path: "/employees",
         element: <Employees/>,
     },

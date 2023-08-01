@@ -1,4 +1,6 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { useParams } from 'react-router-dom';
+
 import SnackbarComp from '../../components/snackbar/snackbar';
 
 import Box from '@mui/material/Box';
@@ -9,19 +11,28 @@ import cafeApis from "../../apis/cafesapi"
 
 export default function AddCafe(){
 
+    const { id } = useParams()
+
+    const [action, setAction] = useState("Add");
+
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState("");
     const [type, setType]: any = useState();
 
     const fields = ["name", "description","location"];
 
+    useEffect(() => {
+        console.log("received id ", id)
+        if(id) setAction("Edit")
+        
+    }, [])
+    
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
       if (reason === 'clickaway') {
         return;
       }
       setOpen(false);
     };
-
 
     const clearInputs = () => {
         fields.map((field:string) => {
@@ -53,7 +64,7 @@ export default function AddCafe(){
 
     return (
         <>
-            <h1>Add Cafe</h1>
+            <h1>{action} Cafe</h1>
             <Box
                 sx={{
                     '& .MuiTextField-root': { m: 1, width: '55ch' },
@@ -61,7 +72,7 @@ export default function AddCafe(){
             >   
                 <form method="post" onSubmit={handleSubmit}>
                     {
-                        fields.map( (field: string) => {
+                        fields.map( (field: string, index: number) => {
 
                             const firstLetter = field.charAt(0);
                             const firstLetterCap = firstLetter.toUpperCase();
@@ -72,7 +83,7 @@ export default function AddCafe(){
 
                             if(field !== "description"){
                                 return (
-                                    <div>
+                                    <div key={index}>
                                         <TextField
                                             required
                                             label={capitalizedWord}
@@ -83,16 +94,16 @@ export default function AddCafe(){
                                 )
                             } else {
                                 return (
-                                    <div>
-                                    <TextField
-                                        required
-                                        multiline
-                                        rows={5}
-                                        label={capitalizedWord}
-                                        name={field}
-                                        id={field}
-                                    />
-                                </div>
+                                    <div key={index}>
+                                        <TextField
+                                            required
+                                            multiline
+                                            rows={5}
+                                            label={capitalizedWord}
+                                            name={field}
+                                            id={field}
+                                        />
+                                    </div>
                                 )
                             }
                         })

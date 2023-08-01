@@ -81,7 +81,11 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   }
 
   const editRow = () => {
-    window.location.href = `/${pageURL}/edit`
+    const selectedRows = gridRef.current.api.getSelectedRows();
+
+    if(selectedRows.length){
+      window.location.href = `/${pageURL}/edit/${selectedRows[0].id}`
+    }
   }
 
   const deleteRow = () => {

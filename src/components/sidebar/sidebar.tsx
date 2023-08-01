@@ -1,5 +1,5 @@
 import Logo from "../logo/logo"
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { Button, IconButton } from '@mui/material';
 import LocalCafeIcon from '@mui/icons-material/LocalCafe';
@@ -15,14 +15,19 @@ export default function Sidebar(){
                     <Logo/>
                 </div>
                 <div className="spacing">
-                    <IconButton aria-label="cafes" onClick={() => navigate("/")}>
-                        <LocalCafeIcon />
-                        <p>Cafes</p>
-                    </IconButton>
-                    <IconButton aria-label="employees" href="/employees">
-                        <BadgeIcon />
-                        <p>Employees</p>
-                    </IconButton>
+                    <Link to="/">
+                        <IconButton aria-label="cafes" className="nav">
+                            <LocalCafeIcon />
+                            <p>Cafes</p>
+                        </IconButton>
+                    </Link>
+                    <Link to="/employees">
+                        <IconButton aria-label="employees" className="nav">
+                            <BadgeIcon />
+                            <p>Employees</p>
+                        </IconButton>
+                    </Link>
+
                 </div>
 
             </div>

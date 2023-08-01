@@ -1,7 +1,7 @@
 import Cafes from "./views/cafes/cafes"
 import AddCafe from './views/cafes/addCafe'
 
-import Employees from "./views/employees"
+import Employees from "./views/employees/employees"
 
 import {
     createBrowserRouter,

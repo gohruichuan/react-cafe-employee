@@ -1,10 +1,13 @@
 import { configureStore } from '@reduxjs/toolkit'
 import CafeSlice from './features/cafeSlice'
+import EmployeeSlice from './features/employeeSlice'
+
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({
     reducer: {
-        cafes: CafeSlice
+        cafes: CafeSlice,
+        employees: EmployeeSlice
     }
 })
 

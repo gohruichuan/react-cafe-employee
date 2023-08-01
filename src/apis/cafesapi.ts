@@ -1,4 +1,4 @@
-const url = "http://127.0.0.1:8080/cafes"
+const baseURL = "http://127.0.0.1:8080/cafes"
 const headers = {
     'Accept': 'application/json',
     'Content-Type': 'application/json'
@@ -6,7 +6,7 @@ const headers = {
 
 const getCafes = async ( params = "" ) => {
     try {
-        const res = await fetch(`${url}?location=` + params, { method: "GET" });
+        const res = await fetch(`${baseURL}?location=` + params, { method: "GET" });
         return await res.json();
     } catch (err) {
         throw err;
@@ -15,7 +15,7 @@ const getCafes = async ( params = "" ) => {
 
 const addCafe = async ( params = {} ) => {
     try {
-        const res = await fetch(`${url}`, {
+        const res = await fetch(`${baseURL}`, {
             method: "POST",
             headers: headers,
             body: JSON.stringify(params)
@@ -28,7 +28,7 @@ const addCafe = async ( params = {} ) => {
 
 const editCafe = async ( params = {} ) => {
     try {
-        const res = await fetch(`${url}`, {
+        const res = await fetch(`${baseURL}`, {
             method: "PUT",
             headers: headers,
             body: JSON.stringify(params)
@@ -41,7 +41,7 @@ const editCafe = async ( params = {} ) => {
 
 const deleteCafe = async ( params = {}) => {
     try {
-        const res = await fetch(`${url}`, {
+        const res = await fetch(`${baseURL}`, {
             method: "DELETE",
             headers: headers,
             body: JSON.stringify({ id: params })

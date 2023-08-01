@@ -5,7 +5,7 @@ import SnackbarComp from '../../components/snackbar/snackbar';
 
 import cafeApis from "../../apis/cafesapi"
 
-import { useAppDispatch } from "../../redux/store"
+import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { deleteCafe } from "../../redux/features/cafeSlice"
 
 import { AgGridReact } from 'ag-grid-react';
@@ -19,6 +19,8 @@ import LaunchIcon from '@mui/icons-material/Launch';
 import { CellClickedEvent } from "ag-grid-community";
 
 export default function AggridTable({type, rowData, filterData, getCafeData}: any){
+  const cafeStoreData = useAppSelector( state => state.cafes)
+
   const pageURL = type === "cafes"? "cafe": "employee"
   const navigate = useNavigate();
   
@@ -57,6 +59,12 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     )
   }
 
+  const cafeNameRenderer = (params: any) => {
+    console.log("cafeNameRenderer params ", params);
+    console.log("cafeStoreData ", cafeStoreData)
+    // return params.
+  }
+
   const [columnDefs, setColumnDefs]: any = useState(
       {
         cafes: [
@@ -65,6 +73,15 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
             { field: 'description', headerName:"Description", editable: false },
             { field: 'employees', headerName:"Employees", cellRenderer: employeeCellRenderer, onCellClicked: (event: CellClickedEvent) => onClickEmployeeCell(event) , editable: false },
             { field: 'location', headerName:"Location", editable: false },
+            { field: 'actions', headerName: "Actions", minWidth: 175,
+            cellRenderer: btnCellRenderer, editable: false }
+          ],
+        employees: [
+            { field: 'id', headerName:"Employee ID", editable: false },
+            { field: 'name', headerName:"Employee Name", editable: false },
+            { field: 'phone_number', headerName:"Phone Number", editable: false },
+            { field: 'cafeId', headerName:"Cafe Name", editable: false, cellRenderer: cafeNameRenderer },
+            { field: 'email_address', headerName:"Email Address", editable: false },
             { field: 'actions', headerName: "Actions", minWidth: 175,
             cellRenderer: btnCellRenderer, editable: false }
           ]

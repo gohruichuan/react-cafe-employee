@@ -3,6 +3,9 @@ import SnackbarComp from '../../components/snackbar/snackbar';
 
 import cafeApis from "../../apis/cafesapi"
 
+import { useAppDispatch } from "../../redux/store"
+import { deleteCafe } from "../../redux/features/cafeSlice"
+
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
@@ -15,6 +18,8 @@ import { CellClickedEvent } from "ag-grid-community";
 
 export default function AggridTable({type, rowData, filterData, getCafeData}: any){
   const pageURL = type === "cafes"? "cafe": "employee"
+
+  const dispatch = useAppDispatch();
 
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
 
@@ -85,14 +90,15 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
   const toDeleteRow = async() => {
     const selectedRows = gridRef.current.api.getSelectedRows();
+    
     setOpenDialog(false);
 
-    console.log("selectedRows ", selectedRows)
     if(selectedRows.length){
-      await cafeApis.deleteCafe(selectedRows[0].id).then(()=>{
+      await cafeApis.deleteCafe(selectedRows[0].id).then((res)=>{
         setMsg("Successfully deleted cafe")
         setSnackBarType("success")
         setOpenSnackbar(true);
+        dispatch(deleteCafe(res))
       }).catch(err => {
         setMsg("Failed to delete cafe: "+ err)
         setSnackBarType("error")
@@ -108,8 +114,12 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     getCafeData(location)
   };
 
-  const handleClose = () => {
+  const handleCloseDialog = () => {
     setOpenDialog(false);
+  };
+
+  const handleCloseSnackbar = () => {
+    setOpenSnackbar(false);
   };
 
   const filterDOM = (
@@ -158,7 +168,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
           </div>
           <Dialog
             open={openDialog}
-            onClose={handleClose}
+            onClose={handleCloseDialog}
             aria-labelledby="alert-dialog-title"
             aria-describedby="alert-dialog-description"
           >
@@ -172,7 +182,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
             </DialogContent>
             <DialogActions>
               <Button onClick={toDeleteRow} autoFocus color="error" variant="contained">Yes</Button>
-              <Button onClick={handleClose} variant="contained">
+              <Button onClick={handleCloseDialog} variant="contained">
                 No
               </Button>
             </DialogActions>
@@ -181,7 +191,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
               type={snackBarType}
               msg={msg}
               open={openSnackbar}
-              handleClose={handleClose}
+              handleClose={handleCloseSnackbar}
           />
       </>
   )

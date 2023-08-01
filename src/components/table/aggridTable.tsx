@@ -4,10 +4,10 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './table.scss'
 
-import FormControl from '@mui/material/FormControl';
-import MenuItem from '@mui/material/MenuItem';
-import Select, { SelectChangeEvent } from '@mui/material/Select';
-import Button from '@mui/material/Button';
+import { Button, Select, SelectChangeEvent, FormControl, MenuItem } from '@mui/material';
+import LaunchIcon from '@mui/icons-material/Launch';
+
+import { CellClickedEvent } from "ag-grid-community";
 
 export default function AggridTable({type, rowData, filterData, getCafeData}: any){
   const pageURL = type === "cafes"? "cafe": "employee"
@@ -15,11 +15,9 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
 
   const gridRef: any = useRef();
-  const filterText:any = useRef();
-
   const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
 
-  const BtnCellRenderer = () =>{
+  const btnCellRenderer = () =>{
     return (
       <>
         <Button variant="contained" className="actionsBtn" onClick={editRow}>Edit</Button>
@@ -28,16 +26,30 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     )
   }
 
+  const onClickEmployeeCell = (event: CellClickedEvent) => {
+    if(event?.data?.id)
+      window.location.href = "/employees/"+event.data.id
+  }
+
+  const employeeCellRenderer = (params: any) => {
+    return (
+      <p className="employeeCell">
+        {params.value}
+        <LaunchIcon className="icon"/>
+      </p>
+    )
+  }
+
   const [columnDefs, setColumnDefs]: any = useState(
       {
           cafes: [
-              { field: 'logo', headerName:"Logo" },
-              { field: 'name', headerName:"Name"  },
-              { field: 'description', headerName:"Description" },
-              { field: 'employees', headerName:"Employees" },
-              { field: 'location', headerName:"Location" },
+              { field: 'logo', headerName:"Logo", editable: false },
+              { field: 'name', headerName:"Name", editable: false },
+              { field: 'description', headerName:"Description", editable: false },
+              { field: 'employees', headerName:"Employees", cellRenderer: employeeCellRenderer, onCellClicked: (event: CellClickedEvent) => onClickEmployeeCell(event) , editable: false },
+              { field: 'location', headerName:"Location", editable: false },
               { field: 'actions', headerName: "Actions", minWidth: 175,
-              cellRenderer: BtnCellRenderer, editable: false }
+              cellRenderer: btnCellRenderer, editable: false }
             ]
       }
   );
@@ -50,25 +62,6 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
       };
     }, []);
   
-  const onCellValueChanged: any  = useCallback((event: any): any => {
-    console.log("onCellValueChanged");
-    
-    console.log(
-      'onCellValueChanged: ' + event.colDef.field + ' = ' + event.newValue
-    );
-  }, []);
-
-  const onRowValueChanged: any  = useCallback((event: any): any => {
-    console.log("onRowValueChanged ", event);
-
-    const data = event.data;
-    console.log(
-      'onRowValueChanged: (' +
-        data.name +
-        ')'
-    );
-  }, []);
-
   const addRow = () => {
     window.location.href = `/${pageURL}/add`
   }
@@ -79,17 +72,6 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
   const deleteRow = () => {
   }
-  // const onBtStopEditing: any  = useCallback(() => {
-  //     gridRef.current.api.stopEditing();
-  // }, []);
-
-  // const onBtStartEditing: any  = useCallback(() => {
-  //     const selectedRowIndex = parseInt(gridRef.current.api.getSelectedNodes()[0].id)
-  //     gridRef.current.api.startEditingCell({
-  //     rowIndex: selectedRowIndex,
-  //     colKey: 'name',
-  //     });
-  // }, []);
 
   const handleChange = async (event: SelectChangeEvent) => {
     const location = event.target.value === "All Locations"? "": event.target.value;
@@ -140,8 +122,6 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
                   columnDefs={columnDefs[type]}
                   defaultColDef={defaultColDef}
                   rowSelection={'single'}
-                  onCellValueChanged={onCellValueChanged}
-                  onRowValueChanged={onRowValueChanged}
               />
           </div>
       </>

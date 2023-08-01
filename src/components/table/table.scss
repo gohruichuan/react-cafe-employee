@@ -14,3 +14,12 @@
     align-items: center;
     display: flex;
 }
+
+.employeeCell{
+    align-items: center;
+    display: flex;
+
+    .icon{
+        margin-left: 10px;
+    }
+}

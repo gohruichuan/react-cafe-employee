@@ -1,10 +1,12 @@
-import { useCallback, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
+import cafeApis from "../../apis/cafes"
+
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './table.scss'
 
-import { Button, Select, SelectChangeEvent, FormControl, MenuItem } from '@mui/material';
+import { Button, Select, SelectChangeEvent, FormControl, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
 
 import { CellClickedEvent } from "ag-grid-community";
@@ -16,6 +18,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
   const gridRef: any = useRef();
   const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
+  const [openDialog, setOpenDialog] = useState(false)
 
   const btnCellRenderer = () =>{
     return (
@@ -42,15 +45,15 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
   const [columnDefs, setColumnDefs]: any = useState(
       {
-          cafes: [
-              { field: 'logo', headerName:"Logo", editable: false },
-              { field: 'name', headerName:"Name", editable: false },
-              { field: 'description', headerName:"Description", editable: false },
-              { field: 'employees', headerName:"Employees", cellRenderer: employeeCellRenderer, onCellClicked: (event: CellClickedEvent) => onClickEmployeeCell(event) , editable: false },
-              { field: 'location', headerName:"Location", editable: false },
-              { field: 'actions', headerName: "Actions", minWidth: 175,
-              cellRenderer: btnCellRenderer, editable: false }
-            ]
+        cafes: [
+            { field: 'logo', headerName:"Logo", editable: false },
+            { field: 'name', headerName:"Name", editable: false },
+            { field: 'description', headerName:"Description", editable: false },
+            { field: 'employees', headerName:"Employees", cellRenderer: employeeCellRenderer, onCellClicked: (event: CellClickedEvent) => onClickEmployeeCell(event) , editable: false },
+            { field: 'location', headerName:"Location", editable: false },
+            { field: 'actions', headerName: "Actions", minWidth: 175,
+            cellRenderer: btnCellRenderer, editable: false }
+          ]
       }
   );
 
@@ -71,6 +74,17 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   }
 
   const deleteRow = () => {
+    setOpenDialog(true);
+  }
+
+  const toDeleteRow = async() => {
+    const selectedRows = gridRef.current.api.getSelectedRows();
+
+    console.log("selectedRows ", selectedRows)
+    if(selectedRows.length){
+      const delCafe = await cafeApis.deleteCafe(selectedRows[0].id)
+      console.log("delCafe ", delCafe);
+    }
   }
 
   const handleChange = async (event: SelectChangeEvent) => {
@@ -78,6 +92,10 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
     setSelectedLocation(event.target.value);
     getCafeData(location)
+  };
+
+  const handleClose = () => {
+    setOpenDialog(false);
   };
 
   const filterDOM = (
@@ -124,6 +142,27 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
                   rowSelection={'single'}
               />
           </div>
+          <Dialog
+            open={openDialog}
+            onClose={handleClose}
+            aria-labelledby="alert-dialog-title"
+            aria-describedby="alert-dialog-description"
+          >
+            <DialogTitle id="alert-dialog-title">
+              {"Confirm Delete?"}
+            </DialogTitle>
+            <DialogContent>
+              <DialogContentText id="alert-dialog-description">
+                By deleting this data, it is a irrevisible action.<br></br> <br></br> Are you sure you want to delete this data?
+              </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={toDeleteRow} autoFocus color="error" variant="contained">Yes</Button>
+              <Button onClick={handleClose} variant="contained">
+                No
+              </Button>
+            </DialogActions>
+          </Dialog>
       </>
   )
 }

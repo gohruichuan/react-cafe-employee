@@ -1,9 +1,10 @@
 import { forwardRef, useState } from 'react'
+import SnackbarComp from '../../components/snackbar/snackbar';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertProps } from '@mui/material/Alert';
+import MuiAlert, { AlertColor, AlertProps } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 
 import cafeApis from "../../apis/cafes"
@@ -11,11 +12,8 @@ import cafeApis from "../../apis/cafes"
 export default function AddCafe(){
 
     const [open, setOpen] = useState(false);
-    const [openError, setOpenError] = useState(false);
-
-    const [errorMsg, setErrorMsg] = useState("");
-
-    const successMsg = "Successfully Add Cafe"
+    const [msg, setMsg] = useState("");
+    const [type, setType]: any = useState();
 
     const fields = ["name", "description","location"];
 
@@ -24,7 +22,6 @@ export default function AddCafe(){
         return;
       }
       setOpen(false);
-      setOpenError(false);
     };
 
     const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
@@ -51,11 +48,14 @@ export default function AddCafe(){
         const formData = new FormData(form);
         let formJson = Object.fromEntries(formData.entries());
         await cafeApis.addCafe(formJson).then( () => {
+            setMsg("Successfully Add Cafe")
+            setType("success")
             setOpen(true);
             clearInputs();
         }).catch(err => {
-            setErrorMsg(err)
-            setOpenError(true);
+            setMsg("Failed to add cafe: "+ err)
+            setType("error")
+            setOpen(true);
         })
 
     }
@@ -108,16 +108,12 @@ export default function AddCafe(){
                     }
                     <Button type="submit" variant='contained'>Submit form</Button>
                 </form>
-                <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="success" sx={{ width: '100%' }}>
-                        {successMsg}
-                    </Alert>
-                </Snackbar>
-                <Snackbar open={openError} autoHideDuration={6000} onClose={handleClose}>
-                    <Alert onClose={handleClose} severity="error" sx={{ width: '100%' }}>
-                        {errorMsg}
-                    </Alert>
-                </Snackbar>
+                <SnackbarComp
+                    type={type}
+                    msg={msg}
+                    open={open}
+                    handleClose={handleClose}
+                />
             </Box>
 
         </>

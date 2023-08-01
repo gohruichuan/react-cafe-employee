@@ -20,8 +20,19 @@ const addCafe = ( params = {} ) => {
         }).catch(err => {throw err})
 }
 
+const deleteCafe = ( params = {}) => {
+    return fetch(`${url}`,{
+        method:"DELETE",
+        headers: headers,
+        body: JSON.stringify({id: params})
+    }).then( async res =>{
+        return await res.json();
+    }).catch(err => {throw err})
+}
+
 const functions = {
     "getCafes": getCafes,
-    "addCafe": addCafe
+    "addCafe": addCafe,
+    "deleteCafe": deleteCafe
 }
 export default functions;

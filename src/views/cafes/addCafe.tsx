@@ -1,13 +1,11 @@
-import { forwardRef, useState } from 'react'
+import { useState } from 'react'
 import SnackbarComp from '../../components/snackbar/snackbar';
 
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
-import Snackbar from '@mui/material/Snackbar';
-import MuiAlert, { AlertColor, AlertProps } from '@mui/material/Alert';
 import Button from '@mui/material/Button';
 
-import cafeApis from "../../apis/cafes"
+import cafeApis from "../../apis/cafesapi"
 
 export default function AddCafe(){
 
@@ -23,13 +21,6 @@ export default function AddCafe(){
       }
       setOpen(false);
     };
-
-    const Alert = forwardRef<HTMLDivElement, AlertProps>(function Alert(
-        props,
-        ref,
-    ) {
-    return <MuiAlert elevation={6} ref={ref} variant="filled" {...props} />;
-    });
 
 
     const clearInputs = () => {
@@ -48,7 +39,7 @@ export default function AddCafe(){
         const formData = new FormData(form);
         let formJson = Object.fromEntries(formData.entries());
         await cafeApis.addCafe(formJson).then( () => {
-            setMsg("Successfully Add Cafe")
+            setMsg("Successfully add cafe")
             setType("success")
             setOpen(true);
             clearInputs();

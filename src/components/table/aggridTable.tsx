@@ -1,5 +1,7 @@
 import { useMemo, useRef, useState } from "react"
-import cafeApis from "../../apis/cafes"
+import SnackbarComp from '../../components/snackbar/snackbar';
+
+import cafeApis from "../../apis/cafesapi"
 
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
@@ -19,6 +21,10 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   const gridRef: any = useRef();
   const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
   const [openDialog, setOpenDialog] = useState(false)
+
+  const [openSnackbar, setOpenSnackbar] = useState(false);
+  const [msg, setMsg] = useState("");
+  const [snackBarType, setSnackBarType]: any = useState();
 
   const btnCellRenderer = () =>{
     return (
@@ -79,11 +85,19 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
 
   const toDeleteRow = async() => {
     const selectedRows = gridRef.current.api.getSelectedRows();
+    setOpenDialog(false);
 
     console.log("selectedRows ", selectedRows)
     if(selectedRows.length){
-      const delCafe = await cafeApis.deleteCafe(selectedRows[0].id)
-      console.log("delCafe ", delCafe);
+      await cafeApis.deleteCafe(selectedRows[0].id).then(()=>{
+        setMsg("Successfully deleted cafe")
+        setSnackBarType("success")
+        setOpenSnackbar(true);
+      }).catch(err => {
+        setMsg("Failed to delete cafe: "+ err)
+        setSnackBarType("error")
+        setOpenSnackbar(true);
+      })
     }
   }
 
@@ -163,6 +177,12 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
               </Button>
             </DialogActions>
           </Dialog>
+          <SnackbarComp
+              type={snackBarType}
+              msg={msg}
+              open={openSnackbar}
+              handleClose={handleClose}
+          />
       </>
   )
 }

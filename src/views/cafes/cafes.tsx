@@ -2,8 +2,8 @@ import { useEffect, useState } from "react"
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 
 import AggridTable from "../../components/table/aggridTable"
+import cafeApis from "../../apis/cafesapi"
 
-import cafeApis from "../../apis/cafes"
 import { setCafes } from "../../redux/features/cafeSlice"
 
 export default function Cafes(){

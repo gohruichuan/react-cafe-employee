@@ -36,9 +36,24 @@ const addEmployee = async (params = {}) => {
     }
 }
 
+const editEmployee = async (params: any) => {
+    try{
+        const res =await fetch(baseURL, 
+            {
+                method: "PUT",
+                headers: headers,
+                body: JSON.stringify(params)
+            })  
+        return apiUtils.apiSuccessHandling(res)
+    } catch(err: any){
+        throw apiUtils.apiErrorHandling(err)
+    }
+}
+
 const apiFuncs = {
     getEmployees: getEmployees,
-    addEmployee: addEmployee
+    addEmployee: addEmployee,
+    editEmployee: editEmployee
 }
 
 export default apiFuncs;

@@ -24,16 +24,8 @@ export default function Employees(){
       dispatch(setEmployees(employeesData))
     }
 
-    // const getCafeData = async () =>{
-    //   if(!cafeStoreData.cafes.length){
-    //     const cafesDataRes = await cafeApis.getCafes()
-    //     dispatch(setCafes(cafesDataRes))
-    //   }
-    // }
-
     useEffect(()=>{
         getEmployeesData(cafeid)
-        // getCafeData()
     }, [])
 
     useEffect(()=>{

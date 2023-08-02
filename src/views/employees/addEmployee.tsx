@@ -2,12 +2,13 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { setCafes } from "../../redux/features/cafeSlice"
+import { setEmployees } from "../../redux/features/employeeSlice"
 
 import SnackbarComp from '../../components/snackbar/snackbar';
 
 import {Box, TextField, Button, Radio, RadioGroup, FormControlLabel, Select, SelectChangeEvent, MenuItem, FormLabel, FormControl } from '@mui/material';
 
-import employeesApi from "../../apis/employeesapi"
+import employeesApis from "../../apis/employeesapi"
 import cafeApis from "../../apis/cafesapi"
 
 interface Employee{
@@ -36,14 +37,19 @@ export default function AddEmployee(){
     const [action, setAction] = useState("Add");
 
     const cafesStoreData = useAppSelector( state => state.cafes)
+    const employeesStoreData = useAppSelector( state => state.employees)
 
     const [open, setOpen] = useState(false);
     const [msg, setMsg] = useState("");
     const [type, setType]: any = useState();
 
-    const fields = ["name", "email_address", "phone_number", "gender", "Worked in"];
+    const fields = ["name", "email_address", "phone_number", "gender", "worked in"];
     const [isError, setIsError]: any = useState({});
-    const [selectedCafe, setSelectedCafe]: any = useState({});
+
+    const [selectedGender, setSelectedGender]: any = useState({});
+    const [selectedCafe, setSelectedCafe]: any = useState("");
+    const [selectedCafeId, setSelectedCafeId]: any = useState("");
+
     const [cafesList, setCafesList]: any = useState([]);
 
     const [editData, setEditData]: any = useState();
@@ -56,24 +62,36 @@ export default function AddEmployee(){
         setCafesList(cafeNameList)
     }
 
+    const getEmployeesData = async (cafeName?: string) =>{
+        const employeesData = await employeesApis.getEmployees(cafeName)
+        dispatch(setEmployees(employeesData))
+      }
+
     const fillInputValues = () => {
-        if(cafesStoreData.cafes.length){
-            const rowData = cafesStoreData.cafes.find((cafe: Employee) => cafe.id === id )
+        if(employeesStoreData.employees.length){
+            const rowData = employeesStoreData.employees.find((employee: Employee) => employee.id === id )
             setEditData(rowData)
             fields.map((field:string) => {
-                const ele: any = document.getElementById(field)
-                if(ele && !ele.value) ele.value = rowData[field]
+                if(field === "gender"){
+                    setSelectedGender(rowData[field])
+                } else if (field === "worked in") {
+                    setSelectedCafe(rowData.cafe_name);
+                    setSelectedCafeId(rowData.cafeId);
+                } else {
+                    const ele: any = document.getElementById(field)
+                    if(ele && !ele.value) ele.value = rowData[field]
+                }
             })
         }
           else {
-            // getCafeData()
+            getEmployeesData()
         }
     }
-    // useEffect(()=>{
-    //     if(id){
-    //         fillInputValues()
-    //     }
-    // }, [cafesStoreData.cafes.length])
+    useEffect(()=>{
+        if(id){
+            fillInputValues()
+        }
+    }, [employeesStoreData.employees?.length])
 
     useEffect(() => {
         const isErrorObj:any = {}
@@ -88,8 +106,6 @@ export default function AddEmployee(){
         if(!cafesStoreData.cafes.length){
             getCafeData()
         }
-        console.log("cafesStoreData.cafes ", cafesStoreData.cafes)
-
     }, [])
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -114,12 +130,11 @@ export default function AddEmployee(){
         const form = e.target;
         const formData = new FormData(form);
         let formJson = Object.fromEntries(formData.entries());
-        console.warn("formJson ", formJson);
-        if(selectedCafe?.cafeId){
-            formJson = Object.assign(formJson, {cafeId: selectedCafe.cafeId})
+        if(selectedCafeId){
+            formJson = Object.assign(formJson, {cafeId: selectedCafeId})
         }
         if(action === 'Add'){
-            await employeesApi.addEmployee(formJson).then( () => {
+            await employeesApis.addEmployee(formJson).then( () => {
                 setMsg("Successfully added employee")
                 setType("success")
                 setOpen(true);
@@ -130,24 +145,29 @@ export default function AddEmployee(){
                 setOpen(true);
             })
         }
-        // else {
-        //     const newData = Object.assign(JSON.parse(JSON.stringify(editData)), formJson)
+        else {
+            const newData = Object.assign(JSON.parse(JSON.stringify(editData)), formJson)
+            delete newData.createdAt;
+            delete newData.updatedAt;
+            delete newData.start_date;
+            delete newData.days_worked;
+            delete newData.cafe_name;
 
-        //     delete newData.createdAt;
-        //     delete newData.updatedAt;
-        //     delete newData.employees;
-
-        //     await employeesApi.editCafe(newData).then( () => {
-        //         setMsg("Successfully edited cafe")
-        //         setType("success")
-        //         setOpen(true);
-        //     }).catch(err => {
-        //         setMsg("Failed to edit cafe: "+ err)
-        //         setType("error")
-        //         setOpen(true);
-        //     })
-        // }
+            await employeesApis.editEmployee(newData).then( () => {
+                setMsg("Successfully edited cafe")
+                setType("success")
+                setOpen(true);
+            }).catch(err => {
+                setMsg("Failed to edit cafe: "+ err)
+                setType("error")
+                setOpen(true);
+            })
+        }
     }
+
+    const onChangeGender = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setSelectedGender((event.target as HTMLInputElement).value);
+    };
 
     const phoneValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         const reg = new RegExp("^(9|8).{7,7}$");
@@ -177,8 +197,10 @@ export default function AddEmployee(){
 
     const handleChange = async (event: SelectChangeEvent) => {
         const cafesData = JSON.parse(JSON.stringify(cafesStoreData.cafes))
-        const cafe = cafesData.find((cafe: Cafe) => cafe.name = event.target.value)
-        setSelectedCafe({cafeId: cafe.id, cafeName: cafe.name});
+        const cafe = cafesData.find((cafe: Cafe) => cafe.name === event.target.value)
+
+        setSelectedCafe(cafe.name);
+        setSelectedCafeId(cafe.id);
     };
 
     return (
@@ -248,22 +270,24 @@ export default function AddEmployee(){
                                     <div key={index}>
                                         <FormLabel id="demo-row-radio-buttons-group-label">Gender</FormLabel>
                                         <RadioGroup
-                                        row
-                                        aria-labelledby="demo-row-radio-buttons-group-label"
-                                        name="gender"
+                                            row
+                                            aria-labelledby="demo-row-radio-buttons-group-label"
+                                            name="gender"
+                                            value={selectedGender}
+                                            onChange={onChangeGender}
                                         >
                                         <FormControlLabel value="Female" control={<Radio />} label="Female" />
                                         <FormControlLabel value="Male" control={<Radio />} label="Male" />
                                         </RadioGroup>
                                     </div>
                                 )
-                            } else if(field === "Worked in") {
+                            } else if(field === "worked in") {
                                 return (
                                     <div key={index}>
                                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                                             <span>Cafe Name: </span>
                                             <Select
-                                                value={selectedCafe.cafeName}
+                                                value={selectedCafe}
                                                 onChange={handleChange}
                                                 displayEmpty
                                                 inputProps={{ 'aria-label': 'Without label' }}

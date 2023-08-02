@@ -28,6 +28,10 @@ const routes = [
         path: "/employee/add",
         element: <AddEmployee/>,
     },
+    {
+        path: "/employee/edit/:id",
+        element: <AddEmployee/>,
+    },
 ]
 
 export default routes

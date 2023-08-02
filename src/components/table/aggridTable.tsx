@@ -31,7 +31,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   const [selectedLocation, setSelectedLocation] = useState('All Locations');
 
   const gridRef: any = useRef();
-  const gridStyle = useMemo(() => ({ height: '90%', width: '100%' }), []);
+  const gridStyle = useMemo(() => ({ height: '80%', width: '100%' }), []);
   const [openDialog, setOpenDialog] = useState(false)
 
   const [openSnackbar, setOpenSnackbar] = useState(false);

@@ -54,12 +54,15 @@ export default function AddEmployee(){
 
     const [editData, setEditData]: any = useState();
 
+    const formatCafeNameList = (cafesData: Cafe[]) => {
+        const cafeNameList = cafesData.map((cafe: Cafe) =>  cafe.name)
+        setCafesList(cafeNameList)
+    }
+
     const getCafeData = async () =>{
         const cafesData = await cafeApis.getCafes()
         dispatch(setCafes(cafesData))
-        
-        const cafeNameList = cafesData.map((cafe: Cafe) =>  cafe.name)
-        setCafesList(cafeNameList)
+        formatCafeNameList(cafesData)
     }
 
     const getEmployeesData = async (cafeName?: string) =>{
@@ -105,6 +108,8 @@ export default function AddEmployee(){
 
         if(!cafesStoreData.cafes.length){
             getCafeData()
+        } else {
+            formatCafeNameList(cafesStoreData.cafes)
         }
     }, [])
 
@@ -294,7 +299,7 @@ export default function AddEmployee(){
                                                 defaultValue = ""
                                             >
                                                 {
-                                                    cafesList.map((data: string, index: number) => {
+                                                    cafesList.length && cafesList.map((data: string, index: number) => {
                                                         return (<MenuItem key={index} value={data}>{data}</MenuItem>)
                                                     })
                                                 }

@@ -74,6 +74,7 @@ export default function AddEmployee(){
         if(employeesStoreData.employees.length){
             const rowData = employeesStoreData.employees.find((employee: Employee) => employee.id === id )
             setEditData(rowData)
+            
             fields.map((field:string) => {
                 if(field === "gender"){
                     setSelectedGender(rowData[field])
@@ -288,7 +289,8 @@ export default function AddEmployee(){
                                 )
                             } else if(field === "worked in") {
                                 return (
-                                    <div key={index}>
+                                    (cafesList.length)? (
+                                        <div key={index}>
                                         <FormControl sx={{ m: 1, minWidth: 120 }}>
                                             <span>Cafe Name: </span>
                                             <Select
@@ -299,13 +301,14 @@ export default function AddEmployee(){
                                                 defaultValue = ""
                                             >
                                                 {
-                                                    cafesList.length && cafesList.map((data: string, index: number) => {
+                                                    cafesList.map((data: string, index: number) => {
                                                         return (<MenuItem key={index} value={data}>{data}</MenuItem>)
                                                     })
                                                 }
                                             </Select>
                                         </FormControl>
                                     </div>
+                                    ) : null
                                 )
                             }
                         })

@@ -37,11 +37,11 @@ export default function Employees(){
     }, [])
 
     useEffect(()=>{
-      if(employeesStoreData.employees.length){
+      if(employeesStoreData.employees?.length){
         const employeesData = JSON.parse(JSON.stringify(employeesStoreData.employees))
         setRowData(employeesData)
       }
-    }, [employeesStoreData.employees.length])
+    }, [employeesStoreData.employees?.length])
 
     return (
         <>

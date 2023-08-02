@@ -158,8 +158,17 @@ export default function AddEmployee(){
         })
     };
 
+    const nameValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        e.target.value = e.target.value.toString().slice(0,10)
+
+        setIsError({
+            ...isError,
+            name: (e.target.value.length >= 6 && e.target.value.length <= 10)? false: true
+        })
+    };
+
     const emailValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const reg = new RegExp('^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$');
+        const reg = new RegExp("[a-z0-9]+@[a-z]+\.[a-z]{2,3}");
         setIsError({
             ...isError,
             email_address: !reg.test(e.target.value)
@@ -171,25 +180,6 @@ export default function AddEmployee(){
         const cafe = cafesData.find((cafe: Cafe) => cafe.name = event.target.value)
         setSelectedCafe({cafeId: cafe.id, cafeName: cafe.name});
     };
-
-    const cafeListDOM = (
-        <>
-            <FormControl sx={{ m: 1, minWidth: 120 }}>
-                <Select
-                    value={selectedCafe}
-                    onChange={handleChange}
-                    displayEmpty
-                    inputProps={{ 'aria-label': 'Without label' }}
-                >
-                    {
-                        cafesList.map((data: string, index: number) => {
-                            return (<MenuItem key={index} value={data}>{data}</MenuItem>)
-                        })
-                    }
-                </Select>
-            </FormControl>
-        </>
-      )
 
     return (
         <>
@@ -218,6 +208,9 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
+                                            onChange={(e) => nameValidation(e)}
+                                            error={isError["name"]}
+                                            helperText="Minimum 6 character and max 10 characters"
                                         />
                                     </div>
                                 )

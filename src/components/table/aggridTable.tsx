@@ -113,7 +113,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     setOpenDialog(false);
 
     if(selectedRows.length){
-      await cafeApis.deleteCafe(selectedRows[0].id).then((res)=>{
+      await cafeApis.deleteCafe(selectedRows[0].id).then((res: any)=>{
         setMsg("Successfully deleted cafe")
         setSnackBarType("success")
         setOpenSnackbar(true);

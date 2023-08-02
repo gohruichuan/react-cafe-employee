@@ -20,8 +20,31 @@ const getEmployees = async (params = "") => {
     }
 }
 
+const addEmployee = async (params = {}) => {
+    try{
+        const res =await fetch(baseURL, 
+            {
+                method: "POST",
+                headers: headers,
+                body: JSON.stringify(params)
+            })  
+
+            console.warn("res.status  ", res.status );
+
+            if(res.status === 200)
+                return await res.json()
+            else throw await res.json()
+    } catch(err: any){
+        console.warn("err ", err);
+        if(err.details.length){
+            throw err.details[0].message;
+        }
+    }
+}
+
 const apiFuncs = {
-    getEmployees: getEmployees
+    getEmployees: getEmployees,
+    addEmployee: addEmployee
 }
 
 export default apiFuncs;

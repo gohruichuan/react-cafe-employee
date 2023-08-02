@@ -1,6 +1,7 @@
 import Cafes from "./views/cafes/cafes"
 import AddCafe from './views/cafes/addCafe'
 import Employees from "./views/employees/employees"
+import AddEmployee from './views/employees/addEmployee'
 
 const routes = [
     {
@@ -22,6 +23,10 @@ const routes = [
     {
         path: "/employees/:cafeid",
         element: <Employees/>,
+    },
+    {
+        path: "/employee/add",
+        element: <AddEmployee/>,
     },
 ]
 

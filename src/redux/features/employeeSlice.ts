@@ -21,7 +21,7 @@ const EmployeeSlice = createSlice({
         setEmployees: (state, action: PayloadAction) => {
             state.employees = action.payload;
         },
-        deleteEmployees: (state, action: PayloadAction<Employee>) => {
+        deleteEmployee: (state, action: PayloadAction<Employee>) => {
             state.employees = state.employees.filter((employee: Employee) => {
                 return employee.id !== action.payload.id;
             });
@@ -30,4 +30,4 @@ const EmployeeSlice = createSlice({
 })
 
 export default EmployeeSlice.reducer;
-export const { setEmployees, deleteEmployees } = EmployeeSlice.actions;
+export const { setEmployees, deleteEmployee } = EmployeeSlice.actions;

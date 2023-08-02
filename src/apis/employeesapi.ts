@@ -50,10 +50,24 @@ const editEmployee = async (params: any) => {
     }
 }
 
+const deleteEmployee = async ( params = {}) => {
+    try {
+        const res = await fetch(`${baseURL}`, {
+            method: "DELETE",
+            headers: headers,
+            body: JSON.stringify({ id: params })
+        });
+        return apiUtils.apiSuccessHandling(res)
+    } catch(err: any){
+        throw apiUtils.apiErrorHandling(err)
+    }
+}
+
 const apiFuncs = {
     getEmployees: getEmployees,
     addEmployee: addEmployee,
-    editEmployee: editEmployee
+    editEmployee: editEmployee,
+    deleteEmployee: deleteEmployee
 }
 
 export default apiFuncs;

@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 import SnackbarComp from '../../components/snackbar/snackbar';
 
 import cafeApis from "../../apis/cafesapi"
+import employeesApis from "../../apis/employeesapi"
 
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { deleteCafe } from "../../redux/features/cafeSlice"
+import { deleteEmployee } from "../../redux/features/employeeSlice"
 
 import { AgGridReact } from 'ag-grid-react';
 import 'ag-grid-community/styles/ag-grid.css';
@@ -113,16 +115,31 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
     setOpenDialog(false);
 
     if(selectedRows.length){
-      await cafeApis.deleteCafe(selectedRows[0].id).then((res: any)=>{
-        setMsg("Successfully deleted cafe")
-        setSnackBarType("success")
-        setOpenSnackbar(true);
-        dispatch(deleteCafe(res))
-      }).catch(err => {
-        setMsg("Failed to delete cafe: "+ err)
-        setSnackBarType("error")
-        setOpenSnackbar(true);
-      })
+
+      if(type === "cafes"){
+        await cafeApis.deleteCafe(selectedRows[0].id).then((res: any)=>{
+          setMsg("Successfully deleted cafe")
+          setSnackBarType("success")
+          setOpenSnackbar(true);
+          dispatch(deleteCafe(res))
+        }).catch(err => {
+          setMsg("Failed to delete cafe: "+ err)
+          setSnackBarType("error")
+          setOpenSnackbar(true);
+        })
+      } else {
+        await employeesApis.deleteEmployee(selectedRows[0].id).then((res: any)=>{
+          setMsg("Successfully deleted employee")
+          setSnackBarType("success")
+          setOpenSnackbar(true);
+          dispatch(deleteEmployee(res))
+        }).catch(err => {
+          setMsg("Failed to delete employee: "+ err)
+          setSnackBarType("error")
+          setOpenSnackbar(true);
+        })
+      }
+
     }
   }
 

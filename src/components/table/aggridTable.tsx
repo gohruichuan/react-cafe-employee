@@ -64,7 +64,6 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: an
   const [columnDefs, setColumnDefs]: any = useState(
       {
         cafes: [
-            { field: 'logo', headerName:"Logo", editable: false },
             { field: 'name', headerName:"Name", editable: false },
             { field: 'description', headerName:"Description", editable: false },
             { field: 'employees', headerName:"Employees", cellRenderer: employeeCellRenderer, onCellClicked: (event: CellClickedEvent) => onClickEmployeeCell(event) , editable: false },

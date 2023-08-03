@@ -1,12 +1,6 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
+import { Cafe } from "../../interfaces/interface";
 
-interface Cafe{
-    id: string,
-    name: string,
-    description: string,
-    logo?: string,
-    location: string,
-}
 const initialState: any = {
     cafes: []
 }

@@ -1,5 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
+
+import { Cafe } from "../../interfaces/interface";
+
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { setCafes } from "../../redux/features/cafeSlice"
 
@@ -12,14 +15,6 @@ import Button from '@mui/material/Button';
 import cafeApis from "../../apis/cafesapi"
 
 import validations from "../../utils/inputValidations"
-
-interface Cafe{
-    id: string,
-    name: string,
-    description: string,
-    logo?: string,
-    location: string,
-}
 
 export default function AddCafe(){
     const navigate = useNavigate();

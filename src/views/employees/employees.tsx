@@ -3,9 +3,7 @@ import { useAppDispatch, useAppSelector } from "../../redux/store"
 
 import AggridTable from "../../components/table/aggridTable"
 import employeesApis from "../../apis/employeesapi"
-import cafeApis from "../../apis/cafesapi"
 
-import { setCafes } from "../../redux/features/cafeSlice"
 import { setEmployees } from "../../redux/features/employeeSlice"
 import { useParams } from "react-router-dom"
 
@@ -14,7 +12,6 @@ export default function Employees(){
     const { cafeid } = useParams()
 
     const employeesStoreData = useAppSelector( state => state.employees)
-    const cafeStoreData = useAppSelector( state => state.cafes)
 
     const [rowData, setRowData]: any = useState([]);
     const [filterData, setFilterData]: any = useState([]);

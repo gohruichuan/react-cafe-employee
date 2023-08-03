@@ -1,5 +1,7 @@
 import { ChangeEvent, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
+import { Employee, Cafe } from '../../interfaces/interface';
+
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { setCafes } from "../../redux/features/cafeSlice"
 import { setEmployees } from "../../redux/features/employeeSlice"
@@ -12,24 +14,6 @@ import employeesApis from "../../apis/employeesapi"
 import cafeApis from "../../apis/cafesapi"
 
 import validations from "../../utils/inputValidations"
-
-interface Employee{
-    id: string,
-    cafeId: string,
-    name: string,
-    email_address: string,
-    phone_number: number
-    gender: "Male" | "Female",
-    start_date: string
-}
-
-interface Cafe{
-    id: string,
-    name: string,
-    description: string,
-    logo?: string,
-    location: string,
-}
 
 export default function AddEmployee(){
     const navigate = useNavigate();

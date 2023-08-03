@@ -1,14 +1,5 @@
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
-
-interface Employee{
-    id: string,
-    cafeId: string,
-    name: string,
-    email_address: string,
-    phone_number: number
-    gender: "Male" | "Female",
-    start_date: string
-}
+import { Employee } from "../../interfaces/interface";
 
 const initialState: any = {
     employees: []

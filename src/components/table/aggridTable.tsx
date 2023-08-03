@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
 import SnackbarComp from '../../components/snackbar/snackbar';
@@ -6,7 +6,7 @@ import SnackbarComp from '../../components/snackbar/snackbar';
 import cafeApis from "../../apis/cafesapi"
 import employeesApis from "../../apis/employeesapi"
 
-import { useAppDispatch, useAppSelector } from "../../redux/store"
+import { useAppDispatch } from "../../redux/store"
 import { deleteCafe } from "../../redux/features/cafeSlice"
 import { deleteEmployee } from "../../redux/features/employeeSlice"
 
@@ -20,9 +20,14 @@ import LaunchIcon from '@mui/icons-material/Launch';
 
 import { CellClickedEvent } from "ag-grid-community";
 
-export default function AggridTable({type, rowData, filterData, getCafeData}: any){
-  const cafeStoreData = useAppSelector( state => state.cafes)
+interface Props{
+  type: string,
+  rowData: null | undefined,
+  filterData: string[],
+  getCafeData?: any
+}
 
+export default function AggridTable({type, rowData, filterData, getCafeData}: Props){
   const pageURL = type === "cafes"? "cafe": "employee"
   const navigate = useNavigate();
   

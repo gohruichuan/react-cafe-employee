@@ -5,20 +5,21 @@ import AggridTable from "../../components/table/aggridTable"
 import cafeApis from "../../apis/cafesapi"
 
 import { setCafes } from "../../redux/features/cafeSlice"
+import { Cafe } from "../../interfaces/interface"
 
 export default function Cafes(){
     const dispatch = useAppDispatch();
     const cafesStoreData = useAppSelector( state => state.cafes)
 
-    const [rowData, setRowData]: any = useState([]);
-    const [filterData, setFilterData]: any = useState([]);
+    const [rowData, setRowData]: Array<Cafe> | any = useState([]);
+    const [filterData, setFilterData]: Array<string> | any = useState([]);
 
     const getCafeData = async (location?: string) =>{
         const cafesData = await cafeApis.getCafes(location)
         dispatch(setCafes(cafesData))
 
         if(!filterData.length){
-          const locationsData = cafesData.reduce((accumulator: any, cafe: any) => {
+          const locationsData = cafesData.reduce((accumulator: any[], cafe: { location: string }) => {
             if (accumulator.indexOf(cafe.location) === -1) {
               accumulator.push(cafe.location);
             }

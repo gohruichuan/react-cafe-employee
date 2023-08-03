@@ -6,6 +6,7 @@ import employeesApis from "../../apis/employeesapi"
 
 import { setEmployees } from "../../redux/features/employeeSlice"
 import { useParams } from "react-router-dom"
+import { Employee } from "../../interfaces/interface"
 
 export default function Employees(){
     const dispatch = useAppDispatch();
@@ -13,8 +14,8 @@ export default function Employees(){
 
     const employeesStoreData = useAppSelector( state => state.employees)
 
-    const [rowData, setRowData]: any = useState([]);
-    const [filterData, setFilterData]: any = useState([]);
+    const [rowData, setRowData]: Array<Employee> | any = useState([]);
+    const [filterData, setFilterData]: Array<string> | any = useState([]);
 
     const getEmployeesData = async (cafeName?: string) =>{
       const employeesData = await employeesApis.getEmployees(cafeName)

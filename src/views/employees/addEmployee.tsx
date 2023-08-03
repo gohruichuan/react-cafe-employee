@@ -1,6 +1,6 @@
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
-import { Employee, Cafe } from '../../interfaces/interface';
+import { Employee, Cafe, inputValidationError } from '../../interfaces/interface';
 
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { setCafes } from "../../redux/features/cafeSlice"
@@ -30,15 +30,15 @@ export default function AddEmployee(){
     const [type, setType]: any = useState();
 
     const fields = ["name", "email_address", "phone_number", "gender", "worked in"];
-    const [isError, setIsError]: any = useState({});
+    const [isError, setIsError]: [{} | any, Dispatch<SetStateAction<{}>>] = useState({});
 
-    const [selectedGender, setSelectedGender]: any = useState({});
-    const [selectedCafe, setSelectedCafe]: any = useState("");
-    const [selectedCafeId, setSelectedCafeId]: any = useState("");
+    const [selectedGender, setSelectedGender]: [{} | any, Dispatch<SetStateAction<{}>>] = useState({});
+    const [selectedCafe, setSelectedCafe]: [ string | any, Dispatch<SetStateAction<string>>] = useState("");
+    const [selectedCafeId, setSelectedCafeId]: [string | any, Dispatch<SetStateAction<string>>] = useState("");
 
-    const [cafesList, setCafesList]: any = useState([]);
+    const [cafesList, setCafesList]: [string[], any] = useState([]);
 
-    const [editData, setEditData]: any = useState();
+    const [editData, setEditData]: [Employee[] | undefined, any] = useState();
 
     const formatCafeNameList = (cafesData: Cafe[]) => {
         const cafeNameList = cafesData.map((cafe: Cafe) =>  cafe.name)
@@ -84,7 +84,7 @@ export default function AddEmployee(){
     }, [employeesStoreData.employees?.length])
 
     useEffect(() => {
-        const isErrorObj:any = {}
+        const isErrorObj: inputValidationError | any = {}
         if(id){
             setAction("Edit")
             fillInputValues()
@@ -109,7 +109,7 @@ export default function AddEmployee(){
 
     const clearInputs = () => {
         fields.map((field:string) => {
-            const ele: any = document.getElementById(field)
+            const ele: HTMLElement | any = document.getElementById(field)
             if(ele && ele.value) ele.value = ""
         })
     }

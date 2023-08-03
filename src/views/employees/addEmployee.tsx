@@ -196,7 +196,7 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => validations.nameValidation(e, setIsError, isError)}
+                                            onChange={(e) => validations.nameValidation({e, setIsError, isError})}
                                             error={isError["name"]}
                                             helperText="Minimum 6 character and max 10 characters"
                                         />
@@ -211,7 +211,7 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => validations.emailValidation(e, setIsError, isError)}
+                                            onChange={(e) => validations.emailValidation({e, setIsError, isError})}
                                             error={isError["email_address"]}
                                         />
                                     </div>
@@ -225,7 +225,7 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => validations.phoneValidation(e, setIsError, isError)}
+                                            onChange={(e) => validations.phoneValidation({e, setIsError, isError})}
                                             error={isError["phone_number"]}
                                             helperText="Phone Number Starts with 8 or 9, and have 8 digits"
                                         />

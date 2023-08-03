@@ -1,6 +1,7 @@
 import { useMemo, useRef, useState } from "react"
 import { useNavigate } from "react-router-dom";
 
+import { AggridTableProps, DefaultColDef, EmployeeCellRenderer } from "../../interfaces/interface"
 import SnackbarComp from '../../components/snackbar/snackbar';
 
 import cafeApis from "../../apis/cafesapi"
@@ -15,19 +16,12 @@ import 'ag-grid-community/styles/ag-grid.css';
 import 'ag-grid-community/styles/ag-theme-alpine.css';
 import './table.scss'
 
-import { Button, Select, SelectChangeEvent, FormControl, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle } from '@mui/material';
+import { Button, Select, SelectChangeEvent, FormControl, MenuItem, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, AlertColor } from '@mui/material';
 import LaunchIcon from '@mui/icons-material/Launch';
 
 import { CellClickedEvent } from "ag-grid-community";
 
-interface Props{
-  type: string,
-  rowData: null | undefined,
-  filterData: string[],
-  getCafeData?: any
-}
-
-export default function AggridTable({type, rowData, filterData, getCafeData}: Props){
+export default function AggridTable({type, rowData, filterData, getCafeData}: AggridTableProps){
   const pageURL = type === "cafes"? "cafe": "employee"
   const navigate = useNavigate();
   
@@ -57,7 +51,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: Pr
       navigate("/employees/"+event.data.id);
   }
 
-  const employeeCellRenderer = (params: any) => {
+  const employeeCellRenderer = (params: EmployeeCellRenderer) => {
     return (
       <p className="employeeCell">
         {params.value}
@@ -89,7 +83,7 @@ export default function AggridTable({type, rowData, filterData, getCafeData}: Pr
       }
   );
 
-  const defaultColDef: any  = useMemo(() => {
+  const defaultColDef: DefaultColDef  = useMemo(() => {
       return {
         flex: 1,
         editable: true,

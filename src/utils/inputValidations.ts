@@ -1,6 +1,7 @@
 import { ChangeEvent } from 'react'
+import { inputValidation } from '../interfaces/interface';
 
-const phoneValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setIsError: (arg0: any) => void, isError: any) => {
+const phoneValidation = ({e, setIsError, isError}: inputValidation) => {
     const reg = new RegExp("^(9|8).{7,7}$");
     e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,8)
     setIsError({
@@ -9,7 +10,7 @@ const phoneValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     })
 };
 
-const nameValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setIsError: (arg0: any) => void, isError: any) => {
+const nameValidation = ({e, setIsError, isError}: inputValidation) => {
     e.target.value = e.target.value.toString().slice(0,10)
 
     setIsError({
@@ -18,7 +19,7 @@ const nameValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, 
     })
 };
 
-const emailValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setIsError: (arg0: any) => void, isError: any) => {
+const emailValidation = ({e, setIsError, isError}: inputValidation) => {
     const reg = new RegExp("[a-z0-9]+@[a-z]+\.[a-z]{2,3}");
     setIsError({
         ...isError,
@@ -26,7 +27,7 @@ const emailValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
     })
 };
 
-const descriptionValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>, setIsError: (arg0: any) => void, isError: any) => {
+const descriptionValidation = ({e, setIsError, isError}: inputValidation) => {
     e.target.value = e.target.value.toString().slice(0,256)
 
     setIsError({

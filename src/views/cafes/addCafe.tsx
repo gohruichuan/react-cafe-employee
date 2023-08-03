@@ -1,7 +1,7 @@
-import { useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 
-import { Cafe } from "../../interfaces/interface";
+import { Cafe, inputValidationError } from "../../interfaces/interface";
 
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { setCafes } from "../../redux/features/cafeSlice"
@@ -30,9 +30,9 @@ export default function AddCafe(){
     const [type, setType]: any = useState();
 
     const fields = ["name", "description", "location"];
-    const [isError, setIsError]: any = useState({});
+    const [isError, setIsError]: [{} | any, Dispatch<SetStateAction<{}>>] = useState({});
 
-    const [editData, setEditData]: any = useState();
+    const [editData, setEditData]: [Cafe[] | undefined, any] = useState();
 
     const getCafeData = async (location?: string) =>{
         const cafesData = await cafeApis.getCafes(location)
@@ -59,7 +59,7 @@ export default function AddCafe(){
     }, [cafesStoreData.cafes.length])
 
     useEffect(() => {
-        const isErrorObj:any = {}
+        const isErrorObj: inputValidationError | any = {}
         if(id){
             setAction("Edit")
             fillInputValues()
@@ -78,7 +78,7 @@ export default function AddCafe(){
 
     const clearInputs = () => {
         fields.map((field:string) => {
-            const ele: any = document.getElementById(field)
+            const ele: HTMLElement | any = document.getElementById(field)
             if(ele && ele.value) ele.value = ""
         })
     }
@@ -124,7 +124,7 @@ export default function AddCafe(){
 
     }
 
-    const helperText = (field: string): any => {
+    const helperText = (field: string) => {
         if(field === "name") return "Minimum 6 character and max 10 characters"
     }
     return (
@@ -154,7 +154,7 @@ export default function AddCafe(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => { if(field === "name") validations.nameValidation(e, setIsError, isError)}}
+                                            onChange={(e) => { if(field === "name") validations.nameValidation({e, setIsError, isError})}}
                                             error={isError[field]}
                                             helperText={helperText(field)}
                                         />
@@ -170,7 +170,7 @@ export default function AddCafe(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => { validations.descriptionValidation(e, setIsError, isError)}}
+                                            onChange={(e) => { validations.descriptionValidation({e, setIsError, isError})}}
                                             error={isError[field]}
                                             helperText="Max 256 characters validation"
                                         />

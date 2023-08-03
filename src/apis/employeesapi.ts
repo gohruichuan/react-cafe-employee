@@ -1,4 +1,5 @@
 import apiUtils from "../utils/apiUtills"
+import { Error, Employee } from "../interfaces/interface"
 
 const baseURL = "http://127.0.0.1:8080/employees"
 const headers = {
@@ -17,7 +18,7 @@ const getEmployees = async (params = "") => {
 
         const res =await fetch(apiURL, {method: "GET"})
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any){
         throw apiUtils.apiErrorHandling(err)
     }
 }
@@ -31,12 +32,12 @@ const addEmployee = async (params = {}) => {
                 body: JSON.stringify(params)
             })  
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any){
         throw apiUtils.apiErrorHandling(err)
     }
 }
 
-const editEmployee = async (params: any) => {
+const editEmployee = async (params: Employee) => {
     try{
         const res =await fetch(baseURL, 
             {
@@ -45,7 +46,7 @@ const editEmployee = async (params: any) => {
                 body: JSON.stringify(params)
             })  
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any){
         throw apiUtils.apiErrorHandling(err)
     }
 }
@@ -58,7 +59,7 @@ const deleteEmployee = async ( params = {}) => {
             body: JSON.stringify({ id: params })
         });
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any){
         throw apiUtils.apiErrorHandling(err)
     }
 }

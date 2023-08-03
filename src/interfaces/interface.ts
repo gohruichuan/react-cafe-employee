@@ -16,4 +16,9 @@ interface Cafe{
     location: string,
 }
 
-export type { Employee, Cafe }
+interface Error{
+    details: string | any[],
+    errors: string | any[]
+}
+
+export type { Employee, Cafe, Error }

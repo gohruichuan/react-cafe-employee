@@ -1,4 +1,5 @@
 import apiUtils from "../utils/apiUtills"
+import { Error, Cafe } from "../interfaces/interface"
 
 const baseURL = "http://127.0.0.1:8080/cafes"
 const headers = {
@@ -23,12 +24,12 @@ const addCafe = async ( params = {} ) => {
             body: JSON.stringify(params)
         });
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any) {
         throw apiUtils.apiErrorHandling(err)
     }
 }
 
-const editCafe = async ( params = {} ) => {
+const editCafe = async ( params: Cafe) => {
     try {
         const res = await fetch(`${baseURL}`, {
             method: "PUT",
@@ -36,7 +37,7 @@ const editCafe = async ( params = {} ) => {
             body: JSON.stringify(params)
         });
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any){
         throw apiUtils.apiErrorHandling(err)
     }
 }
@@ -49,7 +50,7 @@ const deleteCafe = async ( params = {}) => {
             body: JSON.stringify({ id: params })
         });
         return apiUtils.apiSuccessHandling(res)
-    } catch(err: any){
+    } catch(err: Error | any){
         throw apiUtils.apiErrorHandling(err)
     }
 }

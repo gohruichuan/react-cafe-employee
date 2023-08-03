@@ -11,6 +11,8 @@ import Button from '@mui/material/Button';
 
 import cafeApis from "../../apis/cafesapi"
 
+import validations from "../../utils/inputValidations"
+
 interface Cafe{
     id: string,
     name: string,
@@ -33,6 +35,7 @@ export default function AddCafe(){
     const [type, setType]: any = useState();
 
     const fields = ["name", "description", "location"];
+    const [isError, setIsError]: any = useState({});
 
     const [editData, setEditData]: any = useState();
 
@@ -61,10 +64,14 @@ export default function AddCafe(){
     }, [cafesStoreData.cafes.length])
 
     useEffect(() => {
+        const isErrorObj:any = {}
         if(id){
             setAction("Edit")
             fillInputValues()
         }
+
+        fields.map( field => isErrorObj[field] = false)
+        setIsError(isErrorObj)
     }, [])
 
     const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
@@ -122,6 +129,9 @@ export default function AddCafe(){
 
     }
 
+    const helperText = (field: string): any => {
+        if(field === "name") return "Minimum 6 character and max 10 characters"
+    }
     return (
         <>
             <h1>{action} Cafe</h1>
@@ -149,6 +159,9 @@ export default function AddCafe(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
+                                            onChange={(e) => { if(field === "name") validations.nameValidation(e, setIsError, isError)}}
+                                            error={isError[field]}
+                                            helperText={helperText(field)}
                                         />
                                     </div>
                                 )
@@ -162,6 +175,9 @@ export default function AddCafe(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
+                                            onChange={(e) => { validations.descriptionValidation(e, setIsError, isError)}}
+                                            error={isError[field]}
+                                            helperText="Max 256 characters validation"
                                         />
                                     </div>
                                 )

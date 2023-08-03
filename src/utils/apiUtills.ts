@@ -1,6 +1,6 @@
 const apiSuccessHandling = async (res: { status: number; json: () => any; }) => {
     if(res.status === 200) return await res.json()
-    else throw await res.json()
+    else return apiErrorHandling(await res.json())
 }
 
 const apiErrorHandling = (err: { details: string | any[]; errors: string | any[]; }) => {

@@ -11,6 +11,8 @@ import {Box, TextField, Button, Radio, RadioGroup, FormControlLabel, Select, Sel
 import employeesApis from "../../apis/employeesapi"
 import cafeApis from "../../apis/cafesapi"
 
+import validations from "../../utils/inputValidations"
+
 interface Employee{
     id: string,
     cafeId: string,
@@ -175,32 +177,6 @@ export default function AddEmployee(){
         setSelectedGender((event.target as HTMLInputElement).value);
     };
 
-    const phoneValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const reg = new RegExp("^(9|8).{7,7}$");
-        e.target.value = Math.max(0, parseInt(e.target.value) ).toString().slice(0,8)
-        setIsError({
-            ...isError,
-            phone_number: !reg.test(e.target.value)
-        })
-    };
-
-    const nameValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        e.target.value = e.target.value.toString().slice(0,10)
-
-        setIsError({
-            ...isError,
-            name: (e.target.value.length >= 6 && e.target.value.length <= 10)? false: true
-        })
-    };
-
-    const emailValidation = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
-        const reg = new RegExp("[a-z0-9]+@[a-z]+\.[a-z]{2,3}");
-        setIsError({
-            ...isError,
-            email_address: !reg.test(e.target.value)
-        })
-    };
-
     const handleChange = async (event: SelectChangeEvent) => {
         const cafesData = JSON.parse(JSON.stringify(cafesStoreData.cafes))
         const cafe = cafesData.find((cafe: Cafe) => cafe.name === event.target.value)
@@ -236,7 +212,7 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => nameValidation(e)}
+                                            onChange={(e) => validations.nameValidation(e, setIsError, isError)}
                                             error={isError["name"]}
                                             helperText="Minimum 6 character and max 10 characters"
                                         />
@@ -251,7 +227,7 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => emailValidation(e)}
+                                            onChange={(e) => validations.emailValidation(e, setIsError, isError)}
                                             error={isError["email_address"]}
                                         />
                                     </div>
@@ -265,7 +241,7 @@ export default function AddEmployee(){
                                             label={capitalizedWord}
                                             name={field}
                                             id={field}
-                                            onChange={(e) => phoneValidation(e)}
+                                            onChange={(e) => validations.phoneValidation(e, setIsError, isError)}
                                             error={isError["phone_number"]}
                                             helperText="Phone Number Starts with 8 or 9, and have 8 digits"
                                         />

@@ -4,7 +4,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { Cafe, inputValidationError } from "../../interfaces/interface";
 
 import { useAppDispatch, useAppSelector } from "../../redux/store"
-import { setCafes } from "../../redux/features/cafeSlice"
+import { setCafes, editCafe } from "../../redux/features/cafeSlice"
 
 import SnackbarComp from '../../components/snackbar/snackbar';
 
@@ -40,8 +40,9 @@ export default function AddCafe(){
     }
 
     const fillInputValues = () => {
-        if(cafesStoreData.cafes.length){
-            const rowData = cafesStoreData.cafes.find((cafe: Cafe) => cafe.id === id )
+        if(Object.keys(cafesStoreData.cafes).length){
+            const cafesData = Object.values(cafesStoreData.cafes);
+            const rowData: Cafe[] | any = cafesData.find((cafe: Cafe | any) => cafe.id === id )
             setEditData(rowData)
             fields.map((field:string) => {
                 const ele: any = document.getElementById(field)
@@ -56,7 +57,7 @@ export default function AddCafe(){
         if(id){
             fillInputValues()
         }
-    }, [cafesStoreData.cafes.length])
+    }, [Object.keys(cafesStoreData.cafes).length])
 
     useEffect(() => {
         const isErrorObj: inputValidationError | any = {}
@@ -108,20 +109,20 @@ export default function AddCafe(){
 
             delete newData.createdAt;
             delete newData.updatedAt;
+            const storeData = Object.assign({}, newData)
             delete newData.employees;
 
             await cafeApis.editCafe(newData).then( () => {
                 setMsg("Successfully edited cafe")
                 setType("success")
                 setOpen(true);
+                dispatch(editCafe(storeData))
             }).catch(err => {
                 setMsg("Failed to edit cafe: "+ err)
                 setType("error")
                 setOpen(true);
             })
         }
-
-
     }
 
     const helperText = (field: string) => {

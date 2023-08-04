@@ -33,11 +33,9 @@ export default function Cafes(){
     }, [])
 
     useEffect(()=>{
-      if(cafesStoreData.cafes.length){
         const cafesData = JSON.parse(JSON.stringify(cafesStoreData.cafes))
-        setRowData(cafesData)
-      }
-    }, [cafesStoreData.cafes.length])
+        setRowData(Object.values(cafesData))
+    }, [Object.keys(cafesStoreData.cafes).length || cafesStoreData.cafes])
 
     return (
         <>

@@ -3,12 +3,17 @@ import { ChangeEvent, JSXElementConstructor, ReactElement, ReactNode, ReactPorta
 interface Employee{
     id: string,
     cafeId: string,
+    cafe_name: string,
+    days_worked: number,
     name: string,
     email_address: string,
     phone_number: number
     gender: "Male" | "Female",
-    start_date: string
+    start_date: string,
+    createdAt: string,
+    updatedAt: string
 }
+
 
 interface Cafe{
     id: string,

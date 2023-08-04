@@ -27,11 +27,9 @@ export default function Employees(){
     }, [])
 
     useEffect(()=>{
-      if(employeesStoreData.employees?.length){
         const employeesData = JSON.parse(JSON.stringify(employeesStoreData.employees))
-        setRowData(employeesData)
-      }
-    }, [employeesStoreData.employees?.length])
+        setRowData(Object.values(employeesData))
+    }, [Object.keys(employeesStoreData.employees).length || employeesStoreData.employees])
 
     return (
         <>

@@ -1,10 +1,10 @@
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useState } from 'react'
+import { Dispatch, SetStateAction, useEffect, useState } from 'react'
 import { useNavigate, useParams } from 'react-router-dom';
 import { Employee, Cafe, inputValidationError } from '../../interfaces/interface';
 
 import { useAppDispatch, useAppSelector } from "../../redux/store"
 import { setCafes } from "../../redux/features/cafeSlice"
-import { setEmployees } from "../../redux/features/employeeSlice"
+import { setEmployees, editEmployee } from "../../redux/features/employeeSlice"
 
 import SnackbarComp from '../../components/snackbar/snackbar';
 
@@ -57,8 +57,9 @@ export default function AddEmployee(){
       }
 
     const fillInputValues = () => {
-        if(employeesStoreData.employees.length){
-            const rowData = employeesStoreData.employees.find((employee: Employee) => employee.id === id )
+        if(Object.keys(employeesStoreData.employees).length){
+            const employeesData = Object.values(employeesStoreData.employees);
+            const rowData: Employee[] | any = employeesData.find((employee: Employee | any) => employee.id === id )
             setEditData(rowData)
             
             fields.map((field:string) => {
@@ -81,7 +82,7 @@ export default function AddEmployee(){
         if(id){
             fillInputValues()
         }
-    }, [employeesStoreData.employees?.length])
+    }, [Object.keys(employeesStoreData.employees).length])
 
     useEffect(() => {
         const isErrorObj: inputValidationError | any = {}
@@ -142,13 +143,17 @@ export default function AddEmployee(){
             delete newData.createdAt;
             delete newData.updatedAt;
             delete newData.start_date;
+            const storeData = Object.assign({}, newData)
             delete newData.days_worked;
             delete newData.cafe_name;
 
-            await employeesApis.editEmployee(newData).then( () => {
+            await employeesApis.editEmployee(newData).then( (res) => {
                 setMsg("Successfully edited cafe")
                 setType("success")
                 setOpen(true);
+                const cafe = cafesStoreData.cafes.find((cafe: Cafe) => cafe.id === storeData.cafeId)
+                storeData.cafe_name = cafe.name
+                dispatch(editEmployee(storeData))
             }).catch(err => {
                 setMsg("Failed to edit cafe: "+ err)
                 setType("error")
